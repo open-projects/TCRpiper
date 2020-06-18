@@ -1,2 +1,2 @@
 # TCRpiper
-A pipe line for treatment of TCR sequences
+A pipeline for treatment of TCR sequences
