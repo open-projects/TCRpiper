@@ -2,7 +2,7 @@
 
 ### D. Malko
 ### TCRpiper - a pipeline for treatment of TCR sequences
-### All right reserved
+### All rights reserved
 ### 2020
 
 import os
