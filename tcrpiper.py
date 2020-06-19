@@ -12,6 +12,7 @@ import argparse
 
 
 MIGEC_PATH = './bin/migec/migec'
+MIGEC_UTIL_PATH = './bin/migec/util'
 MIXCR_PATH = './bin/mixcr/mixcr'
 VDJTOOLS_PATH = './bin/vdjtools/vdjtools'
 
@@ -34,8 +35,10 @@ def main():
     try:
         log += '====================MIGEC====================\n'
         migec = Migec(in_dir, out_dir, MIGEC_PATH)
+        log += migec.set_util_path(MIGEC_UTIL_PATH)
         log += '>>>CheckoutBatch<<<\n' + migec.CheckoutBatch()
         log += '>>>Histogram<<<\n' + migec.Histogram()
+        log += '>>>HistogramDrawing<<<\n' + migec.Draw()
         log += '>>>AssembleBatch<<<\n' + migec.AssembleBatch()
     except Exception as error:
         log += '\nMIGEC error:\n{}'.format(error)
@@ -211,6 +214,7 @@ class SampleInfo:
 class Migec:
     def __init__(self, indir= '.', outdir='.', prg_path = None):
         self._migec = re.sub(r'/$', '', prg_path) if prg_path else 'migec'
+        self._util = None
         self._indir = re.sub(r'/$', '', indir)
         self._outdir = re.sub(r'/$', '', outdir)
         self._checkout_dir = self._outdir  + '/checkout'
@@ -250,6 +254,12 @@ class Migec:
 
         return barcodes_file
 
+    def set_util_path(self, dir_path):
+        self._util = re.sub(r'/$', '', dir_path)
+        if not os.path.isfile(self._util + '/histogram.R'):
+            raise Exception("Wrong path to the MIGEC util direcory: {}".format(dir_path))
+
+
     def CheckoutBatch(self):
         cmd = self._migec + ' CheckoutBatch -cute {} {}'.format(self._barcodes_file, self._checkout_dir)
         stream = os.popen(cmd)
@@ -257,7 +267,7 @@ class Migec:
 
         return output
 
-    def Histogram(self, outdir='histogram'):
+    def Histogram(self):
         cmd = self._migec + ' Histogram {} {}'.format(self._checkout_dir, self._histogram_dir)
         stream = os.popen(cmd)
         output = stream.read()
@@ -274,6 +284,13 @@ class Migec:
     def get_assemble_dir(self):
         return self._assemble_dir
 
+    def Draw(self):
+        hist = os.path.abspath(self._util + '/histogram.R')
+        cmd = 'cd {}; Rscript {}'.format(self._histogram_dir, hist)
+        stream = os.popen(cmd)
+        output = stream.read()
+
+        return output
 # end of class Migec
 
 
