@@ -115,6 +115,65 @@
 		    </div>
 		    <div class="card h-100 mb-3">
                       <div class="card-body bg-light">
+                        <div class="mb-3">
+                          <label for="smart_id">
+                            <div class="dropdown show">
+                              <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" id="dropdownSmart" aria-haspopup="true" aria-expanded="false">Smart</a>
+                              <div class="dropdown-menu myDropDown" aria-labelledby="dropdownSmart">
+                                <!-- drop down -->
+                                <table class="table table-borderless table-sm">
+                                  <tbody>
+                                    <tr class="dropdown-item">
+                                      <th scope="row" class="smartid">1</th>
+                                      <td class="smartseq">ATCACG</td>
+                                    </tr>
+                                    <tr class="dropdown-item">
+                                      <th scope="row" class="smartid">2</th>
+                                      <td class="smartseq">TGACCA</td>
+                                    </tr>
+                                    <tr class="dropdown-item">
+                                      <th scope="row" class="smartid">3</th>
+                                      <td class="smartseq">ATCACG</td>
+                                    </tr>
+                                    <tr class="dropdown-item">
+                                      <th scope="row" class="smartid">4</th>
+                                      <td class="smartseq">CGATGT</td>
+                                    </tr>
+                                    <tr class="dropdown-item">
+                                      <th scope="row" class="smartid">5</th>
+                                      <td class="smartseq">GATCAG</td>
+                                    </tr>
+                                    <tr class="dropdown-item">
+                                      <th scope="row" class="smartid">6</th>
+                                      <td class="smartseq">ACAGTG</td>
+                                    </tr>
+                                    <tr class="dropdown-item">
+                                      <th scope="row" class="smartid">7</th>
+                                      <td class="smartseq">ATCACG</td>
+                                    </tr>
+                                    <tr class="dropdown-item">
+                                      <th scope="row" class="smartid">8</th>
+                                      <td class="smartseq">ACAGTG</td>
+                                    </tr>
+                                    <tr class="dropdown-item">
+                                      <th scope="row" class="smartid">9</th>
+                                      <td class="smartseq">CAGATC</td>
+                                    </tr>
+                                    <tr class="dropdown-item">
+                                      <th scope="row" class="smartid">10</th>
+                                      <td class="smartseq">GATCAG</td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                          </label>
+			  <input type="text" class="form-control" id="subsample_id" placeholder="12345">
+			  <div class="invalid-feedback">
+                            Please enter a valid smart.
+			  </div>
+			</div>
+
                         <!-- Alfa-Beta Row -->
 		        <div class="row">
                           <!-- Alfa -->
@@ -130,10 +189,61 @@
                                   </div>
                                 </div>
                                 <div class="mb-3">
-                                  <label for="subsample_id">Index ID</label>
-			          <input type="text" class="form-control" id="subsample_id" placeholder="12345">
+                                  <label for="alfa_index_id">
+                                    <div class="dropdown show">
+                                      <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" id="dropdownAlfaIndex" aria-haspopup="true" aria-expanded="false">Index</a>
+                                      <div class="dropdown-menu myDropDown" aria-labelledby="dropdownAlfaIndex">
+                                        <!-- drop down -->
+                                        <table class="table table-borderless table-sm">
+                                          <tbody>
+                                            <tr class="dropdown-item">
+                                              <th scope="row" class="alfaindexid">1</th>
+                                              <td class="alfaindexseq">ATCACG</td>
+                                            </tr>
+                                            <tr class="dropdown-item">
+                                              <th scope="row" class="alfaindexid">2</th>
+                                              <td class="alfaindexseq">TGACCA</td>
+                                            </tr>
+                                            <tr class="dropdown-item">
+                                              <th scope="row" class="alfaindexid">3</th>
+                                              <td class="alfaindexseq">ATCACG</td>
+                                            </tr>
+                                            <tr class="dropdown-item">
+                                              <th scope="row" class="alfaindexid">4</th>
+                                              <td class="alfaindexseq">CGATGT</td>
+                                            </tr>
+                                            <tr class="dropdown-item">
+                                              <th scope="row" class="alfaindexid">5</th>
+                                              <td class="alfaindexseq">GATCAG</td>
+                                            </tr>
+                                            <tr class="dropdown-item">
+                                              <th scope="row" class="alfaindexid">6</th>
+                                              <td class="alfaindexseq">ACAGTG</td>
+                                            </tr>
+                                            <tr class="dropdown-item">
+                                              <th scope="row" class="alfaindexid">7</th>
+                                              <td class="alfaindexseq">ATCACG</td>
+                                            </tr>
+                                            <tr class="dropdown-item">
+                                              <th scope="row" class="alfaindexid">8</th>
+                                              <td class="alfaindexseq">ACAGTG</td>
+                                            </tr>
+                                            <tr class="dropdown-item">
+                                              <th scope="row" class="alfaindexid">9</th>
+                                              <td class="alfaindexseq">CAGATC</td>
+                                            </tr>
+                                            <tr class="dropdown-item">
+                                              <th scope="row" class="alfaindexid">10</th>
+                                              <td class="alfaindexseq">GATCAG</td>
+                                            </tr>
+                                          </tbody>
+                                        </table>
+                                      </div>
+                                    </div>
+                                  </label>
+			          <input type="text" class="form-control" id="alfa_index_id" placeholder="12345">
 			          <div class="invalid-feedback">
-				    Please enter a valid index ID.
+				    Please enter a valid index.
 			          </div>
                                 </div>
                               </div>
@@ -155,10 +265,61 @@
                                   </div>
                                 </div>
                                 <div class="mb-3">
-                                  <label for="subsample_id">Index ID</label>
-			          <input type="text" class="form-control" id="subsample_id" placeholder="12345">
+                                  <label for="beta_index_id">
+                                    <div class="dropdown show">
+                                      <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" id="dropdownBetaIndex" aria-haspopup="true" aria-expanded="false">Index</a>
+                                      <div class="dropdown-menu myDropDown" aria-labelledby="dropdownBetaIndex">
+                                        <!-- drop down -->
+                                        <table class="table table-borderless table-sm">
+                                          <tbody>
+                                            <tr class="dropdown-item">
+                                              <th scope="row" class="betaindexid">1</th>
+                                              <td class="betaindexseq">ATCACG</td>
+                                            </tr>
+                                            <tr class="dropdown-item">
+                                              <th scope="row" class="betaindexid">2</th>
+                                              <td class="betaindexseq">TGACCA</td>
+                                            </tr>
+                                            <tr class="dropdown-item">
+                                              <th scope="row" class="betaindexid">3</th>
+                                              <td class="betaindexseq">ATCACG</td>
+                                            </tr>
+                                            <tr class="dropdown-item">
+                                              <th scope="row" class="betaindexid">4</th>
+                                              <td class="betaindexseq">CGATGT</td>
+                                            </tr>
+                                            <tr class="dropdown-item">
+                                              <th scope="row" class="betaindexid">5</th>
+                                              <td class="betaindexseq">GATCAG</td>
+                                            </tr>
+                                            <tr class="dropdown-item">
+                                              <th scope="row" class="betaindexid">6</th>
+                                              <td class="betaindexseq">ACAGTG</td>
+                                            </tr>
+                                            <tr class="dropdown-item">
+                                              <th scope="row" class="betaindexid">7</th>
+                                              <td class="betaindexseq">ATCACG</td>
+                                            </tr>
+                                            <tr class="dropdown-item">
+                                              <th scope="row" class="betaindexid">8</th>
+                                              <td class="betaindexseq">ACAGTG</td>
+                                            </tr>
+                                            <tr class="dropdown-item">
+                                              <th scope="row" class="betaindexid">9</th>
+                                              <td class="betaindexseq">CAGATC</td>
+                                            </tr>
+                                            <tr class="dropdown-item">
+                                              <th scope="row" class="betaindexid">10</th>
+                                              <td class="betaindexseq">GATCAG</td>
+                                            </tr>
+                                          </tbody>
+                                        </table>
+                                      </div>
+                                    </div>
+                                  </label>
+			          <input type="text" class="form-control" id="beta_index_id" placeholder="12345">
 			          <div class="invalid-feedback">
-				    Please enter a valid index ID.
+				    Please enter a valid index.
 			          </div>
                                 </div>
                               </div>
@@ -169,14 +330,6 @@
                         </div>
 		        <!-- /.row -->
 
-                        <div class="mb-3">
-			  <label for="subsample_id">Smart ID</label>
-			  <input type="text" class="form-control" id="subsample_id" placeholder="12345">
-			  <div class="invalid-feedback">
-                            Please enter a valid smart ID.
-			  </div>
-			</div>
-
                         <div class="card h-100">
                           <div class="card-body">
                             <table class="table table-hover collapse" id="ids">
@@ -184,39 +337,34 @@
                                 <tr>
                                   <th scope="col">Project ID</th>
                                   <th scope="col">Alfa index ID</th>
-                                  <th scope="col">Alfa smart ID</th>
                                   <th scope="col">Beta index ID</th>
-                                  <th scope="col">Beta smart ID</th>
+                                  <th scope="col">Smart ID</th>
                                 </tr>
                               </thead>
                               <tbody>
                                 <tr>
-                                  <th scope="row">1</th>
-                                  <td>122343</td>
-                                  <td>452435</td>
-                                  <td>2435245</td>
-                                  <td>575857</td>
+                                  <th scope="row" class="projectid">1</th>
+                                  <td><span class="alfaindexid">1</span> (<span class="alfaindexseq">CAGATC</span>)</td>
+                                  <td><span class="betaindexid">4</span> (<span class="betaindexseq">CAGATC</span>)</td>
+                                  <td><span class="smartid">2</span> (<span class="smartseq">CAGATC</span>)</td>
                                 </tr>
                                 <tr>
-                                  <th scope="row">2</th>
-                                  <td>122343</td>
-                                  <td>452435</td>
-                                  <td>2435245</td>
-                                  <td>575857</td>
+                                  <th scope="row" class="projectid">2</th>
+                                  <td><span class="alfaindexid">34</span> (<span class="alfaindexseq">CAGATC</span>)</td>
+                                  <td><span class="betaindexid">24</span> (<span class="betaindexseq">CAGATC</span>)</td>
+                                  <td><span class="smartid">5</span> (<span class="smartseq">CAGATC</span>)</td>
                                 </tr>
                                 <tr>
-                                  <th scope="row">3</th>
-                                  <td>122343</td>
-                                  <td>452435</td>
-                                  <td>2435245</td>
-                                  <td>575857</td>
+                                  <th scope="row" class="projectid">3</th>
+                                  <td><span class="alfaindexid">7</span> (<span class="alfaindexseq">CAGATC</span>)</td>
+                                  <td><span class="betaindexid">35</span> (<span class="betaindexseq">CAGATC</span>)</td>
+                                  <td><span class="smartid">9</span> (<span class="smartseq">CAGATC</span>)</td>
                                 </tr>
                                 <tr>
-                                  <th scope="row">4</th>
-                                  <td>478565</td>
-                                  <td>452435</td>
-                                  <td>2435245</td>
-                                  <td>575857</td>
+                                  <th scope="row" class="projectid">4</th>
+                                  <td><span class="alfaindexid">23</span> (<span class="alfaindexseq">CAGATC</span>)</td>
+                                  <td><span class="betaindexid">11</span> (<span class="betaindexseq">CAGATC</span>)</td>
+                                  <td><span class="smartid">44</span> (<span class="smartseq">CAGATC</span>)</td>
                                 </tr>
                               </tbody>
                             </table>
@@ -232,7 +380,7 @@
 		      <label for="commets">Comments</label>
 		      <input type="text" class="form-control" id="commets" placeholder="My commets">
 		      <div class="invalid-feedback">
-			Please enter commets in a valid format.
+			Please enter commets in valid format.
 		      </div>
 		    </div>
                   </div>
