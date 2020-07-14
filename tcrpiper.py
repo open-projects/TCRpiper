@@ -19,7 +19,7 @@ VDJTOOLS_PATH = './bin/vdjtools/vdjtools'
 
 def main():
     input_parser = argparse.ArgumentParser(description='TCRpiper: a pipeline for treatment of TCR sequences.')
-    input_parser.add_argument('-i', metavar='/path/to/input_dir', default='.', help='the path to the input directory (the directory has to have a SampleInfo file)', required=False)
+    input_parser.add_argument('-i', metavar='/path/to/input_dir', help='the path to the input directory (the directory has to have a SampleInfo file)', required=True)
     input_parser.add_argument('-o', metavar='/path/to/output_dir', default='.', help='the path to the output directory', required=False)
     input_parser.add_argument('-l', metavar='/path/to/file_name.log', default=None, help='the log file', required=False)
 
@@ -35,7 +35,7 @@ def main():
     try:
         log += '====================MIGEC====================\n'
         migec = Migec(in_dir, out_dir, MIGEC_PATH)
-        log += migec.set_util_path(MIGEC_UTIL_PATH)
+        migec.set_util_path(MIGEC_UTIL_PATH)
         log += '>>>CheckoutBatch<<<\n' + migec.CheckoutBatch()
         log += '>>>Histogram<<<\n' + migec.Histogram()
         log += '>>>HistogramDrawing<<<\n' + migec.Draw()
@@ -258,6 +258,7 @@ class Migec:
         self._util = re.sub(r'/$', '', dir_path)
         if not os.path.isfile(self._util + '/histogram.R'):
             raise Exception("Wrong path to the MIGEC util direcory: {}".format(dir_path))
+        return ''
 
 
     def CheckoutBatch(self):
@@ -292,7 +293,6 @@ class Migec:
 
         return output
 # end of class Migec
-
 
 if __name__ == '__main__':
     main()
