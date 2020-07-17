@@ -10,32 +10,33 @@ import re
 import glob
 import argparse
 
-
-MIGEC_PATH = './bin/migec/migec'
-MIGEC_UTIL_PATH = './bin/migec/util'
-MIXCR_PATH = './bin/mixcr/mixcr'
-VDJTOOLS_PATH = './bin/vdjtools/vdjtools'
-
+# It requires R packages: ggplot2, reshape
 
 def main():
     input_parser = argparse.ArgumentParser(description='TCRpiper: a pipeline for treatment of TCR sequences.')
     input_parser.add_argument('-i', metavar='/path/to/input_dir', help='the path to the input directory (the directory has to have a SampleInfo file)', required=True)
     input_parser.add_argument('-o', metavar='/path/to/output_dir', default='.', help='the path to the output directory', required=False)
+    input_parser.add_argument('-m', metavar='6G', default='6G', help='Xmx memory size', required=False)
+    input_parser.add_argument('-b', metavar='/path/to/bin', default='./bin', help='bin directory with programs', required=False)
     input_parser.add_argument('-l', metavar='/path/to/file_name.log', default=None, help='the log file', required=False)
 
     args = input_parser.parse_args()
     in_dir = re.sub(r'\/$', '', args.i)
     out_dir = re.sub(r'\/$', '', args.o)
+    xmx_size = args.m
+    bin_path = args.b
     log_file = args.l
 
     enr = out_dir + '/ENR'
     qc = out_dir + '/runQC'
 
+    Bin(bin_path)
+    Xmx(xmx_size)
+
     log = ''
     try:
         log += '====================MIGEC====================\n'
-        migec = Migec(in_dir, out_dir, MIGEC_PATH)
-        migec.set_util_path(MIGEC_UTIL_PATH)
+        migec = Migec(in_dir, out_dir)
         log += '>>>CheckoutBatch<<<\n' + migec.CheckoutBatch()
         log += '>>>Histogram<<<\n' + migec.Histogram()
         log += '>>>HistogramDrawing<<<\n' + migec.Draw()
@@ -46,15 +47,15 @@ def main():
 
     try:
         log += '\n====================MIXCR====================\n'
-        mixcr = Mixcr(in_dir, out_dir, MIXCR_PATH)
-        log += mixcr.Analyze(migec.get_assemble_dir())
+        mixcr = Mixcr(in_dir, out_dir)
+        log += '>>>Analyze<<<\n' + mixcr.Analyze(migec.get_assemble_dir())
     except Exception as error:
         log += '\nMIXCR error:\n{}'.format(error)
         exit('...error')
 
     try:
         log += '\n====================VDJtools==================\n'
-        vdjtools = VDJtools(out_dir, VDJTOOLS_PATH)
+        vdjtools = VDJtools(out_dir)
         log += '>>>Convert<<<\n' + vdjtools.Convert(mixcr.get_analize_dir())
         log += '>>>Filter<<<\n' + vdjtools.Filter()
     except Exception as error:
@@ -68,70 +69,6 @@ def main():
     print('...done')
 
 # end of main()
-
-
-class VDJtools:
-    def __init__(self, outdir='.', prg_path=None):
-        self._vdjtools = re.sub(r'/$', '', prg_path) if prg_path else 'vdjtools'
-        self._outdir = re.sub(r'/$', '', outdir)
-        self._vdj_dir = self._outdir + '/vdj'
-
-    def Convert(self, dir_name):
-        output = ''
-        for file_name in glob.glob(re.sub(r'/$', '', dir_name) + '/*clonotypes*.txt'):
-            cmd = self._vdjtools + ' Convert -S mixcr {} {}/{}'.format(file_name, self._vdj_dir, 'vdj')
-            stream = os.popen(cmd)
-            output += '>{}<\n'.format(file_name) + stream.read()
-        return output
-
-    def Filter(self, dir_name=None):
-        dir_name = dir_name if dir_name else self._vdj_dir
-
-        output = ''
-        for file_name in glob.glob(re.sub(r'/$', '', dir_name) + '/vdj.*clonotypes*.txt'):
-            cmd = self._vdjtools + ' FilterNonFunctional {} {}/{}'.format(file_name, self._vdj_dir, 'nc')
-            stream = os.popen(cmd)
-            output += '>{}<\n'.format(file_name) + stream.read()
-
-        return output
-
-    def get_vdj_dir(self):
-        return self._vdj_dir
-
-# end of class VDJtools
-
-
-class Mixcr:
-    def __init__(self, indir= '.', outdir='.', prg_path = None):
-        self._mixcr = re.sub(r'/$', '', prg_path) if prg_path else 'mixcr'
-        self._indir = re.sub(r'/$', '', indir)
-        self._outdir = re.sub(r'/$', '', outdir)
-        self._analyze_dir = self._outdir + '/analyze'
-
-    def Analyze(self, assemble_dir):
-        assemble_dir = re.sub(r'/$', '', assemble_dir)
-        info = SampleInfo()
-        if not info.find(self._indir):
-            raise Exception('No SampleInfo file in the directory: {}'.format(self._indir))
-
-        os.makedirs(self._analyze_dir, exist_ok=True)
-
-        output = ''
-        for record in info.parse():
-            cmd = self._mixcr + ' analyze amplicon -s hsa --starting-material rna '
-            cmd += '--5-end no-v-primers --3-end c-primers --adapters no-adapters --receptor-type {}'.format(record.chain)
-            cmd += ' {}/{}_R1.*.fastq.gz'.format(assemble_dir, record.sample_name)
-            cmd += ' {}/{}_R2.*.fastq.gz'.format(assemble_dir, record.sample_name)
-            cmd += ' {}/{}'.format(self._analyze_dir, record.sample_name)
-            stream = os.popen(cmd)
-            output += '>>>{}<<<\n'.format(record.sample_name) + stream.read()
-
-        return output
-
-    def get_analize_dir(self):
-        return self._analyze_dir
-
-# end of class Mixcr
 
 
 class SampleInfo:
@@ -211,9 +148,79 @@ class SampleInfo:
 # end of class SampleInfo
 
 
+class VDJtools:
+    def __init__(self, outdir='.'):
+        self._jar = Bin().get('vdjtools*.jar')[0]
+        self._xmx = Xmx().get()
+        self._outdir = re.sub(r'/$', '', outdir)
+        self._vdj_dir = self._outdir + '/vdj'
+
+    def Convert(self, dir_name):
+        output = ''
+        for file_name in glob.glob(re.sub(r'/$', '', dir_name) + '/*clonotypes*.txt'):
+            cmd = 'java ' + self._xmx + ' -jar ' + self._jar
+            cmd += ' Convert -S mixcr {} {}/{}'.format(file_name, self._vdj_dir, 'vdj')
+            stream = os.popen(cmd)
+            output += '>{}<\n'.format(file_name) + stream.read()
+        return output
+
+    def Filter(self, dir_name=None):
+        dir_name = dir_name if dir_name else self._vdj_dir
+
+        output = ''
+        for file_name in glob.glob(re.sub(r'/$', '', dir_name) + '/vdj.*clonotypes*.txt'):
+            cmd = 'java ' + self._xmx + ' -jar ' + self._jar
+            cmd += ' FilterNonFunctional {} {}/{}'.format(file_name, self._vdj_dir, 'nc')
+            stream = os.popen(cmd)
+            output += '>{}<\n'.format(file_name) + stream.read()
+
+        return output
+
+    def get_vdj_dir(self):
+        return self._vdj_dir
+
+# end of class VDJtools
+
+
+class Mixcr:
+    def __init__(self, indir= '.', outdir='.'):
+        self._jar = Bin().get('mixcr*.jar')[0]
+        self._xmx = Xmx().get()
+        self._indir = re.sub(r'/$', '', indir)
+        self._outdir = re.sub(r'/$', '', outdir)
+        self._analyze_dir = self._outdir + '/analyze'
+
+    def Analyze(self, assemble_dir):
+        assemble_dir = re.sub(r'/$', '', assemble_dir)
+        info = SampleInfo()
+        if not info.find(self._indir):
+            raise Exception('No SampleInfo file in the directory: {}'.format(self._indir))
+
+        os.makedirs(self._analyze_dir, exist_ok=True)
+
+        output = ''
+        for record in info.parse():
+            cmd = 'java ' + self._xmx + ' -jar ' + self._jar
+            cmd += ' analyze amplicon -s hsa --starting-material rna '
+            cmd += '--5-end no-v-primers --3-end c-primers --adapters no-adapters --receptor-type {}'.format(record.chain)
+            cmd += ' {}/{}_R1.*.fastq.gz'.format(assemble_dir, record.sample_name)
+            cmd += ' {}/{}_R2.*.fastq.gz'.format(assemble_dir, record.sample_name)
+            cmd += ' {}/{}'.format(self._analyze_dir, record.sample_name)
+            stream = os.popen(cmd)
+            output += '>>>{}<<<\n'.format(record.sample_name) + stream.read()
+
+        return output
+
+    def get_analize_dir(self):
+        return self._analyze_dir
+
+# end of class Mixcr
+
+
 class Migec:
-    def __init__(self, indir= '.', outdir='.', prg_path = None):
-        self._migec = re.sub(r'/$', '', prg_path) if prg_path else 'migec'
+    def __init__(self, indir= '.', outdir='.'):
+        self._jar = Bin().get('migec*.jar')[0]
+        self._xmx = Xmx().get()
         self._util = None
         self._indir = re.sub(r'/$', '', indir)
         self._outdir = re.sub(r'/$', '', outdir)
@@ -254,29 +261,25 @@ class Migec:
 
         return barcodes_file
 
-    def set_util_path(self, dir_path):
-        self._util = re.sub(r'/$', '', dir_path)
-        if not os.path.isfile(self._util + '/histogram.R'):
-            raise Exception("Wrong path to the MIGEC util direcory: {}".format(dir_path))
-        return ''
-
-
     def CheckoutBatch(self):
-        cmd = self._migec + ' CheckoutBatch -cute {} {}'.format(self._barcodes_file, self._checkout_dir)
+        cmd = 'java ' + self._xmx + ' -jar ' + self._jar
+        cmd += ' CheckoutBatch -cute {} {}'.format(self._barcodes_file, self._checkout_dir)
         stream = os.popen(cmd)
         output = stream.read()
 
         return output
 
     def Histogram(self):
-        cmd = self._migec + ' Histogram {} {}'.format(self._checkout_dir, self._histogram_dir)
+        cmd = 'java ' + self._xmx + ' -jar ' + self._jar
+        cmd += ' Histogram {} {}'.format(self._checkout_dir, self._histogram_dir)
         stream = os.popen(cmd)
         output = stream.read()
 
         return output
 
     def AssembleBatch(self):
-        cmd = self._migec + ' AssembleBatch  -c {} {} {}'.format(self._checkout_dir, self._histogram_dir, self._assemble_dir)
+        cmd = 'java ' + self._xmx + ' -jar ' + self._jar
+        cmd += ' AssembleBatch  -c {} {} {}'.format(self._checkout_dir, self._histogram_dir, self._assemble_dir)
         stream = os.popen(cmd)
         output = stream.read()
 
@@ -286,13 +289,49 @@ class Migec:
         return self._assemble_dir
 
     def Draw(self):
-        hist = os.path.abspath(self._util + '/histogram.R')
+        hist = Bin().get('histogram.R')[0]
         cmd = 'cd {}; Rscript {}'.format(self._histogram_dir, hist)
         stream = os.popen(cmd)
         output = stream.read()
 
         return output
+
 # end of class Migec
+
+
+class Bin:
+    def __new__(cls, bin='./bin'):
+        if not hasattr(cls, 'instance'):
+            cls._bin = re.sub(r'/$', '', os.path.abspath(bin))
+            cls.instance = super(Bin, cls).__new__(cls)
+
+        return cls.instance
+
+    def get(self, file_name):
+        path = self._bin + '/**/' + re.sub(r'^/', '', file_name)
+
+        return glob.glob(path, recursive=True)
+
+# end of Bin class (Singleton)
+
+
+class Xmx:
+    def __new__(cls, mem='8G'):
+        if not re.search(r'^\d+[GM]$', mem):
+            raise Exception("Wrong value of memory usage limit: {} (default value is '8G')".format(mem))
+        if not hasattr(cls, 'instance'):
+            cls._mem = mem
+            cls.instance = super(Xmx, cls).__new__(cls)
+
+        return cls.instance
+
+    def get(self):
+        xmx = '-Xmx' + self._mem
+
+        return xmx
+
+# end of Xmx class (Singleton)
+
 
 if __name__ == '__main__':
     main()
