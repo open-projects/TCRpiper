@@ -19,7 +19,7 @@ def main():
     input_parser.add_argument('-m', metavar='6G', default='6G', help='Xmx memory size', required=False)
     input_parser.add_argument('-f', metavar='threshold_value', default=0, help='force overseq threshold', required=False)
     input_parser.add_argument('-c', action='store_true', help='force collision filter', required=False )
-    input_parser.add_argument('-b', metavar='/path/to/bin', default='./bin', help='bin directory with programs', required=False)
+    input_parser.add_argument('-b', metavar='/path/to/bin', default=None, help='the global path to a bin directory with the programs', required=False)
     input_parser.add_argument('-l', metavar='/path/to/file_name.log', default=None, help='the log file', required=False)
 
     args = input_parser.parse_args()
@@ -309,9 +309,13 @@ class Migec:
 
 
 class Bin:
-    def __new__(cls, bin='./bin'):
+    def __new__(cls, bin=None):
         if not hasattr(cls, 'instance'):
-            cls._bin = re.sub(r'/$', '', os.path.abspath(bin))
+            if bin:
+                cls._bin = re.sub(r'/$', '', bin)
+            else:
+                real_path = os.path.dirname(os.path.realpath(__file__))
+                cls._bin = re.sub(r'/$', '', real_path) + '/bin'
             cls.instance = super(Bin, cls).__new__(cls)
 
         return cls.instance
