@@ -17,6 +17,8 @@ def main():
     input_parser.add_argument('-i', metavar='/path/to/input_dir', help='the path to the input directory (the directory has to have a SampleInfo file)', required=True)
     input_parser.add_argument('-o', metavar='/path/to/output_dir', default='.', help='the path to the output directory', required=False)
     input_parser.add_argument('-m', metavar='6G', default='6G', help='Xmx memory size', required=False)
+    input_parser.add_argument('-f', metavar='threshold_value', default=0, help='force overseq threshold', required=False)
+    input_parser.add_argument('-c', action='store_true', help='force collision filter', required=False )
     input_parser.add_argument('-b', metavar='/path/to/bin', default='./bin', help='bin directory with programs', required=False)
     input_parser.add_argument('-l', metavar='/path/to/file_name.log', default=None, help='the log file', required=False)
 
@@ -26,6 +28,8 @@ def main():
     xmx_size = args.m
     bin_path = args.b
     log_file = args.l
+    overseq = args.f
+    collisions = args.c
 
     enr = out_dir + '/ENR'
     qc = out_dir + '/runQC'
@@ -33,39 +37,39 @@ def main():
     Bin(bin_path)
     Xmx(xmx_size)
 
-    log = ''
+    log = Log(log_file)
     try:
-        log += '====================MIGEC====================\n'
+        log.add('====================MIGEC====================\n')
         migec = Migec(in_dir, out_dir)
-        log += '>>>CheckoutBatch<<<\n' + migec.CheckoutBatch()
-        log += '>>>Histogram<<<\n' + migec.Histogram()
-        log += '>>>HistogramDrawing<<<\n' + migec.Draw()
-        log += '>>>AssembleBatch<<<\n' + migec.AssembleBatch()
+        log.add('>>>CheckoutBatch<<<\n' + migec.CheckoutBatch())
+        log.add('>>>Histogram<<<\n' + migec.Histogram())
+        log.add('>>>HistogramDrawing<<<\n' + migec.Draw())
+        log.add('>>>AssembleBatch<<<\n' + migec.AssembleBatch(overseq, collisions))
     except Exception as error:
-        log += '\nMIGEC error:\n{}'.format(error)
+        log.add('\nMIGEC error:\n{}'.format(error))
+        log.write()
         exit('...error')
 
     try:
-        log += '\n====================MIXCR====================\n'
+        log.add('\n====================MIXCR====================\n')
         mixcr = Mixcr(in_dir, out_dir)
-        log += '>>>Analyze<<<\n' + mixcr.Analyze(migec.get_assemble_dir())
+        log.add('>>>Analyze<<<\n' + mixcr.Analyze(migec.get_assemble_dir()))
     except Exception as error:
-        log += '\nMIXCR error:\n{}'.format(error)
+        log.add('\nMIXCR error:\n{}'.format(error))
+        log.write()
         exit('...error')
 
     try:
-        log += '\n====================VDJtools==================\n'
+        log.add('\n====================VDJtools==================\n')
         vdjtools = VDJtools(out_dir)
-        log += '>>>Convert<<<\n' + vdjtools.Convert(mixcr.get_analize_dir())
-        log += '>>>Filter<<<\n' + vdjtools.Filter()
+        log.add('>>>Convert<<<\n' + vdjtools.Convert(mixcr.get_analize_dir()))
+        log.add('>>>Filter<<<\n' + vdjtools.Filter())
     except Exception as error:
-        log += '\nVDJtools error:\n{}'.format(error)
+        log.add('\nVDJtools error:\n{}'.format(error))
         exit('...error')
 
-    if log_file:
-        with open(log_file, "w") as lg:
-            lg.write(log)
-
+    log.add('\n...done')
+    log.write()
     print('...done')
 
 # end of main()
@@ -277,9 +281,14 @@ class Migec:
 
         return output
 
-    def AssembleBatch(self):
+    def AssembleBatch(self, overseq=0, collisions=False):
         cmd = 'java ' + self._xmx + ' -jar ' + self._jar
-        cmd += ' AssembleBatch  -c {} {} {}'.format(self._checkout_dir, self._histogram_dir, self._assemble_dir)
+        cmd += ' AssembleBatch'
+        if overseq:
+            cmd += ' --force-overseq {}'.format(overseq)
+            if collisions:
+                cmd += ' --force-collision-filter'
+        cmd += ' -c {} {} {}'.format(self._checkout_dir, self._histogram_dir, self._assemble_dir)
         stream = os.popen(cmd)
         output = stream.read()
 
@@ -331,6 +340,21 @@ class Xmx:
         return xmx
 
 # end of Xmx class (Singleton)
+
+class Log:
+    def __init__(self, log_file=None):
+        self._file_name = log_file
+        self._log = ''
+
+    def add(self, string):
+        self._log += string if re.search(r'\n$', string) else string + "\n"
+
+    def write(self):
+        if self._file_name:
+            with open(self._file_name, "w") as lg:
+                lg.write(self._log)
+
+# end of Log class
 
 
 if __name__ == '__main__':
