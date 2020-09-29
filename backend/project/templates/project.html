@@ -1,0 +1,312 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>TCRpiper</title>
+  <link rel="shortcut icon" href="{% static "favicon.ico" %}" />
+
+  <!-- Bootstrap core CSS -->
+  <link href="{% static "vendor/bootstrap/css/bootstrap.min.css" %}" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href="{% static "css/main.css" %}" rel="stylesheet">
+
+</head>
+
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="#">TCRpiper</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url "set" %}">Runs</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url "primers" %}">Primers</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">About</a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="#">Log Out</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Content -->
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 mb-5"></div>
+    </div>
+    <div class="row">
+      <div class="col-md-12 mb-5">
+        <div class="card">
+          <div class="card-body">
+           <h2 class="card-title"><p class="text-primary">(New) Project (#)</p></h2>
+           <hr class="my-3">
+           <h4 class="text-secondary">Run #123</h4>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Centered Row -->
+    <div class="row">
+      <div class="col-md-12 mb-5">
+        <div class="card h-100">
+          <form>
+            <div class="card-header">Project configuration</div>
+            <div class="card-body">
+              <div class="mb-3">
+                <label for="project_name">Project name</label>
+                <input type="text" class="form-control" id="project_name" placeholder="My project">
+                <div class="invalid-feedback">
+                  Please enter a valid project name.
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="sample_id">Sample ID</label>
+                  <input type="text" class="form-control" id="sample_id" placeholder="12345" value="" required="">
+                  <div class="invalid-feedback">
+                    Please enter a valid sample ID.
+                  </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="sample_name">Sample name</label>
+                    <input type="text" class="form-control" id="sample_name" placeholder="My sample" value="" required="">
+                    <div class="invalid-feedback">
+                      Valid last name is required.
+                    </div>
+                  </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="cells_number">Number of cells</label>
+                  <input type="text" class="form-control" id="cells_number" placeholder="12345">
+                  <div class="invalid-feedback">
+                    Please enter a valid number of cells.
+                  </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="read_number">Number of expected reads</label>
+                  <input type="text" class="form-control" id="read_number" placeholder="12345">
+                  <div class="invalid-feedback">
+                    Please enter a valid number of expected reads.
+                  </div>
+                </div>
+              </div>
+              <div class="card h-100 mb-3">
+                <div class="card-body bg-light">
+                  <div class="mb-3">
+                    <label for="smart_id">
+                        <div class="dropdown show">
+                          <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" id="dropdownSmart" aria-haspopup="true" aria-expanded="false">Smart</a>
+                          <div class="dropdown-menu myDropDown" aria-labelledby="dropdownSmart">
+                            <!-- drop down -->
+                            <table class="table table-borderless table-sm">
+                              <tbody>
+                                {% for smart in smart_list %}
+                                  <tr class="dropdown-item" name="smartCheck{{ smart.id }}" id="smartCheck{{ smart.id }}">
+                                    <th scope="row" class="smartid">{{smart.number}}</th>
+                                    <td class="smartseq">{{ smart.seq }}</td>
+                                  </tr>
+                                {% endfor %}
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </label>
+                    <input type="text" class="form-control" id="subsample_id" placeholder="12345">
+			        <div class="invalid-feedback">
+                      Please enter a valid smart.
+			        </div>
+                  </div>
+                  <!-- Alfa-Beta Row -->
+		          <div class="row">
+                      <!-- Alfa -->
+		            <div class="col-md-6 mb-3">
+                      <div class="card h-100">
+                        <div class="card-body">
+                          <h3 class="card-title">Alfa</h3>
+                          <div class="mb-3">
+                            <label for="subsample_id">Subsample ID</label>
+                            <input type="text" class="form-control" id="subsample_id" placeholder="12345">
+                            <div class="invalid-feedback">
+                              Please enter a valid sample ID.
+                            </div>
+                          </div>
+                          <div class="mb-3">
+                            <label for="alfa_index_id">
+                              <div class="dropdown show">
+                                  <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" id="dropdownAlfaIndex" aria-haspopup="true" aria-expanded="false">Index</a>
+                                  <div class="dropdown-menu myDropDown" aria-labelledby="dropdownAlfaIndex">
+                                    <!-- drop down -->
+                                    <table class="table table-borderless table-sm">
+                                      <tbody>
+                                        {% for index in index_list %}
+                                          <tr class="dropdown-item" name="alfaindexCheck{{ index.id }}" id="alfaindexCheck{{ index.id }}">
+                                            <th scope="row" class="alfaindexid">{{index.number}}</th>
+                                            <td class="alfaindexseq">{{ index.seq }}</td>
+                                          </tr>
+                                        {% endfor %}
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                </div>
+                            </label>
+                            <input type="text" class="form-control" id="alfa_index_id" placeholder="12345">
+                            <div class="invalid-feedback">
+                              Please enter a valid index.
+                            </div>
+                          </div>
+                        </div>
+                        <!-- /.card-body -->
+                      </div>
+                    </div>
+                    <!-- /.col-md-6 -->
+
+                    <!-- Beta -->
+		            <div class="col-md-6 mb-3">
+                      <div class="card h-100">
+                        <div class="card-body">
+                          <h3 class="card-title">Beta</h3>
+                          <div class="mb-3">
+                            <label for="subsample_id">Subsample ID</label>
+                            <input type="text" class="form-control" id="subsample_id" placeholder="12345">
+                            <div class="invalid-feedback">
+                              Please enter a valid sample ID.
+                            </div>
+                          </div>
+                          <div class="mb-3">
+                            <label for="beta_index_id">
+                              <div class="dropdown show">
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" id="dropdownBetaIndex" aria-haspopup="true" aria-expanded="false">Index</a>
+                                <div class="dropdown-menu myDropDown" aria-labelledby="dropdownBetaIndex">
+                                  <!-- drop down -->
+                                  <table class="table table-borderless table-sm">
+                                    <tbody>
+                                    {% for index in index_list %}
+                                      <tr class="dropdown-item" name="betaindexCheck{{ index.id }}" id="betaindexCheck{{ index.id }}">
+                                        <th scope="row" class="betaindexid">{{index.number}}</th>
+                                        <td class="betaindexseq">{{ index.seq }}</td>
+                                      </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                  </table>
+                                </div>
+                              </div>
+                            </label>
+                            <input type="text" class="form-control" id="beta_index_id" placeholder="12345">
+                            <div class="invalid-feedback">
+                              Please enter a valid index.
+                            </div>
+                          </div>
+                        </div>
+                        <!-- /.card-body -->
+			          </div>
+                    </div>
+                    <!-- /.col-md-6 -->
+                  </div>
+		          <!-- /.row -->
+
+                  <div class="card h-100">
+                      <div class="card-body">
+                        <table class="table table-hover collapse" id="ids">
+                          <thead>
+                            <tr>
+                              <th scope="col">Project ID</th>
+                              <th scope="col">Alfa Index ID</th>
+                              <th scope="col">Beta Index ID</th>
+                              <th scope="col">Smart ID</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <th scope="row" class="projectid">1</th>
+                              <td><span class="alfaindexid">1</span> (<span class="alfaindexseq">CAGATC</span>)</td>
+                              <td><span class="betaindexid">4</span> (<span class="betaindexseq">CAGATC</span>)</td>
+                              <td><span class="smartid">2</span> (<span class="smartseq">CAGATC</span>)</td>
+                            </tr>
+                            <tr>
+                              <th scope="row" class="projectid">2</th>
+                              <td><span class="alfaindexid">34</span> (<span class="alfaindexseq">CAGATC</span>)</td>
+                              <td><span class="betaindexid">24</span> (<span class="betaindexseq">CAGATC</span>)</td>
+                              <td><span class="smartid">5</span> (<span class="smartseq">CAGATC</span>)</td>
+                            </tr>
+                            <tr>
+                              <th scope="row" class="projectid">3</th>
+                              <td><span class="alfaindexid">7</span> (<span class="alfaindexseq">CAGATC</span>)</td>
+                              <td><span class="betaindexid">35</span> (<span class="betaindexseq">CAGATC</span>)</td>
+                              <td><span class="smartid">9</span> (<span class="smartseq">CAGATC</span>)</td>
+                            </tr>
+                            <tr>
+                              <th scope="row" class="projectid">4</th>
+                              <td><span class="alfaindexid">23</span> (<span class="alfaindexseq">CAGATC</span>)</td>
+                              <td><span class="betaindexid">11</span> (<span class="betaindexseq">CAGATC</span>)</td>
+                              <td><span class="smartid">44</span> (<span class="smartseq">CAGATC</span>)</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        <div class="float-right">
+                          <button type="button" class="btn btn-primary hidden" data-toggle="collapse" data-target="#ids">Show/Hide used IDs</button>
+                        </div>
+                      </div>
+                    </div>
+                  <!-- /.card -->
+                </div>
+              </div>
+              <div class="mb-5">
+                  <label for="commets">Comments</label>
+                  <input type="text" class="form-control" id="commets" placeholder="My commets">
+                  <div class="invalid-feedback">
+                    Please enter commets in valid format.
+                  </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                  <button type="button" class="btn btn-danger">Delete</button>
+                  <div class="float-right">
+                    <button type="button" class="btn btn-outline-dark">Cancel</button>
+                    <button type="button" class="btn btn-success">Submit</button>
+                  </div>
+              </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /.container -->
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p class="text-center text-white">TCRpiper 2020</p>
+    </div>
+    <!-- /.container -->
+  </footer>
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="{% static "vendor/jquery/jquery.min.js" %}"></script>
+  <script src="{% static "vendor/bootstrap/js/bootstrap.bundle.min.js" %}"></script>
+  <script src="{% static "js/main.js" %}"></script>
+
+</body>
+
+</html>
