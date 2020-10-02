@@ -163,7 +163,7 @@
                               Please enter a valid sample ID.
                             </div>
                           </div>
-                          <div class="mb-3">
+                          <div class="dropdown-with-input mb-3">
                             <label for="alfa_index_id">
                               <div class="dropdown show">
                                 <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" id="dropdownAlfaIndex" aria-haspopup="true" aria-expanded="false">Index</a>
@@ -172,7 +172,7 @@
                                   <table class="table table-borderless table-sm">
                                     <tbody>
                                       {% for index in index_list %}
-                                        <tr class="dropdown-item" name="alfaindexCheck{{ index.id }}" id="alfaindexCheck{{ index.id }}">
+                                        <tr class="dropdown-item" name="{{ index.number }}" id="alfaindexCheck{{ index.id }}">
                                           <th scope="row" class="alfaindexid">{{index.number}}</th>
                                           <td class="alfaindexseq">{{ index.seq }}</td>
                                         </tr>
@@ -205,7 +205,7 @@
                               Please enter a valid sample ID.
                             </div>
                           </div>
-                          <div class="mb-3">
+                          <div class="dropdown-with-input mb-3">
                             <label for="beta_index_id">
                               <div class="dropdown show">
                                 <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" id="dropdownBetaIndex" aria-haspopup="true" aria-expanded="false">Index</a>
@@ -214,7 +214,7 @@
                                   <table class="table table-borderless table-sm">
                                     <tbody>
                                     {% for index in index_list %}
-                                      <tr class="dropdown-item" name="betaindexCheck{{ index.id }}" id="betaindexCheck{{ index.id }}">
+                                      <tr class="dropdown-item" name="{{ index.number }}" id="betaindexCheck{{ index.id }}">
                                         <th scope="row" class="betaindexid">{{index.number}}</th>
                                         <td class="betaindexseq">{{ index.seq }}</td>
                                       </tr>

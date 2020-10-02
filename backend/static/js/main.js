@@ -17,4 +17,5 @@ $(".dropdown-item").click(function (e) {
     var number = $(this).attr('name');
     var dropdown_with_input = $(this).closest('.dropdown-with-input');
     dropdown_with_input.find('input').val(number);
-}
+});
+
