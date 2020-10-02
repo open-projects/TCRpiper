@@ -128,5 +128,6 @@ DATE_FORMAT = 'Y-m-d'
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
+    BASE_DIR,
     BASE_DIR + "/static",
 ]

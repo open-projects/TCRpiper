@@ -61,7 +61,6 @@ def index(request):
             pattern_smart = re.compile(r'smartCheck(\d+)')
             show_tab_smart = 0
             for item in request.POST:
-                print(item)
                 p_index = re.match(pattern_index, item)
                 p_smart = re.match(pattern_smart, item)
                 if p_index:
