@@ -78,7 +78,7 @@
     <div class="row">
       <div class="col-md-12 mb-5">
         <div class="card h-100">
-          <form action="/project/set/{{ project_id }}/" method="post" enctype="multipart/form-data">
+          <form action="{% url 'project_set' project_id %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <input type="hidden" name="project_id" id="project_id" value="{{ project_id }}">
             <input type="hidden" name="run_id" id="run_id" value="{{ run_id }}">
@@ -293,12 +293,12 @@
             </div>
             <div class="card-footer">
               {% if project_id %}
-              <a type="button" class="btn btn-danger" id="deleteProject" href="/project/del/{{ project_id }}/">Delete</a>
+              <a type="button" class="btn btn-danger" id="deleteProject" href="{% url 'project_del' project_id %}">Delete</a>
               {% else %}
               <button type="button" class="btn invisible">placeholder</button>
               {% endif %}
               <div class="float-right">
-                <a type="button" class="btn btn-outline-dark" href="/run/get/{{ run_id }}/">Cancel</a>
+                <a type="button" class="btn btn-outline-dark" href="{% url 'run:run_get' run_id %}">Cancel</a>
                 <button type="submit" class="btn btn-success">Submit</button>
               </div>
             </div>
