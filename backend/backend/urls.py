@@ -23,7 +23,7 @@ urlpatterns = [
     path(r'primers/', include('primers.urls')),
     path(r'project/', include('project.urls')),
     path(r'run/', include('run.urls')),
-    path(r'set/', include('set.urls')),
+    path(r'stock/', include('stock.urls')),
     #re_path(r'^$', include('tcrpiper.urls')),
 ]
 

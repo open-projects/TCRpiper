@@ -33,10 +33,10 @@
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
-            <a class="nav-link" href="{% url "set" %}">Runs</a>
+            <a class="nav-link" href="{% url 'stock:index' %}">Runs in Stock</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url "primers" %}">Primers</a>
+            <a class="nav-link" href="{% url 'primers:index' %}">Primers</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#">About</a>
@@ -60,7 +60,7 @@
           <div class="card-body">
            <h2 class="card-title"><p class="text-primary">Runs</p></h2>
            <hr class="my-3">
-           <h4 class="text-secondary">2 active and 2 archived run(s) in stock</h4>
+           <h4 class="text-secondary">{{ num_of_runs }} run(s) in stock</h4>
           </div>
         </div>
       </div>
@@ -81,42 +81,56 @@
                   <th scope="col">Projects</th>
                   <th scope="col">Created</th>
                   <th scope="col">Status</th>
+                  <th scope="col">Configuration</th>
                 </tr>
               </thead>
               <tbody>
-                <tr class="table-success">
-                  <th scope="row">4</th>
-                  <td>Name of run 4</td>
-                  <td>0</td>
-                  <td>01/03/2020</td>
-                  <td>Open</td>
+              {% for run in run_list %}
+                <tr class=
+                {% if run.status == 'open' %}
+                  "table-success"
+                {% elif run.status == 'closed' %}
+                  "table-primary"
+                {% else %}
+                  ""
+                {% endif %}
+                onclick="location.href='{% url 'run:run_get' run.id %}'"
+                style="cursor: pointer;" name="{{ run.id }}" id="runID{{ run.id }}"
+                >
+                  <th scope="row">{{ run.id }}</th>
+                  <td>{{ run.run_name }}</td>
+                  <td>{{ run.num_of_projects }}</td>
+                  <td>{{ run.date }}</td>
+                  <td>{{ run.status }}</td>
+                  <td>
+                    {% if run.status == 'open' %}
+                      <span class="text-danger">Not ready</span>
+                    {% elif run.status == 'closed' %}
+                      <a href="#">Download</a>
+                    {% else %}
+                      Out-of-date
+                    {% endif %}
+                  </td>
                 </tr>
-                <tr class="table-primary">
-                  <th scope="row">3</th>
-                  <td>Name of run 3</td>
-                  <td>5</td>
-                  <td>01/02/2020</td>
-                  <td>Submitted</td>
-                </tr>
-                <tr>
-                  <th scope="row">2</th>
-                  <td>Name of run 2</td>
-                  <td>10</td>
-                  <td>10/01/2020</td>
-                  <td>Archived</td>
-                </tr>
-                <tr>
-                  <th scope="row">1</th>
-                  <td>Name of run 1</td>
-                  <td>10</td>
-                  <td>01/01/2020</td>
-                  <td>Archived</td>
-                </tr>
+              {% endfor %}
               </tbody>
             </table>
-
           </div>
-          <div class="card-footer"><span class="invisible">Placeholder</span></div>
+          <div class="card-footer">
+            <button type="button" class="btn invisible">Placeholder</button>
+            <span class="float-right">
+              <!--a type="button" class="btn btn-success" href="{% url 'run:run_get' 0 %}">Create run</a-->
+              <form action="{% url 'stock:create_run' project_id %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="input-group mb-3">
+                  <input type="text" class="form-control" placeholder="Run name" aria-label="Run name" aria-describedby="basic-addon2">
+                  <div class="input-group-append">
+                    <button type="submit" class="btn btn-outline btn-success">Create run</button>
+                  </div>
+                </div>
+              </form>
+            </span>
+          </div>
         </div>
       </div>
     </div>

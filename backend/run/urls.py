@@ -4,5 +4,7 @@ from . import views
 
 app_name = 'run'
 urlpatterns = [
-    path('get/<int:run_id>/', views.run, name='run_get'),
+    path('', views.stock, name='run_stock'),
+    path('new/', views.new, name='run_new'),
+    path('get/<int:run_id>/', views.get, name='run_get'),
 ]
