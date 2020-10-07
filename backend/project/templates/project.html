@@ -33,7 +33,7 @@
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'stock:index' %}">Runs in Stock</a>
+            <a class="nav-link" href="{% url 'run:run_stock' %}">Runs in Stock</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{% url 'primers:index' %}">Primers</a>
@@ -78,7 +78,7 @@
     <div class="row">
       <div class="col-md-12 mb-5">
         <div class="card h-100">
-          <form action="{% url 'project:project_set' project_id %}" method="post" enctype="multipart/form-data">
+          <form action="{% url 'project:project_set' run_id project_id %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <input type="hidden" name="project_id" id="project_id" value="{{ project_id }}">
             <input type="hidden" name="run_id" id="run_id" value="{{ run_id }}">

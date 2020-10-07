@@ -33,7 +33,7 @@
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'stock:index' %}">SetUp</a>
+            <a class="nav-link" href="{% url 'run:run_stock' %}">SetUp</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{% url 'primers:index' %}">Primers</a>
@@ -58,14 +58,13 @@
       <div class="col-md-12 mb-5">
         <div class="card">
           <div class="card-body">
-           <h2 class="card-title"><p class="text-primary">Run #123</p></h2>
+           <h2 class="card-title"><p class="text-primary">Run #{{ run_id }}</p></h2>
            <hr class="my-3">
-           <h4 class="text-secondary">4 project(s) in run</h4>
+           <h4 class="text-secondary">{{ num_of_projects }} project(s) in the run</h4>
           </div>
         </div>
       </div>
     </div>
-
 
     <!-- Centered Row -->
     <div class="row">
@@ -84,44 +83,29 @@
                 </tr>
               </thead>
               <tbody>
-                <tr onclick="location.href='/project/get/1'" style="cursor:pointer;">
-                  <th scope="row">1</th>
-                  <td>Name of project 1</td>
-                  <td>Maleeva</td>
-                  <td>01/01/2020</td>
-                  <td>I whant to work harder!</td>
-                </tr>
-                <tr>
-                  <th scope="row">2</th>
-                  <td>Name of project 2</td>
-                  <td>Maleeva</td>
-                  <td>10/01/2020</td>
-                  <td>I whant to work at night!</td>
-                </tr>
-                <tr>
-                  <th scope="row">3</th>
-                  <td>Name of project 3</td>
-                  <td>Romaniuk</td>
-                  <td>01/02/2020</td>
-                  <td>Don't touch my toys!</td>
-                </tr>
-                <tr>
-                  <th scope="row">4</th>
-                  <td>Name of project 4</td>
-                  <td>Khmelevskaya</td>
-                  <td>01/03/2020</td>
-                  <td>I've stopped smoking!</td>
-                </tr>
+                {% for project in project_list %}
+                  <tr onclick="location.href={% url 'project:project_get' run_id project_id %}" style="cursor:pointer;">
+                    <th scope="row">{{ project.id }}</th>
+                    <td>{{ project.name }}</td>
+                    <td>{{ project.owner }}</td>
+                    <td>{{ project.date }}</td>
+                    <td>{{ project.comments }}</td>
+                  </tr>
+                {% endfor %}
               </tbody>
             </table>
           </div>
           <div class="card-footer">
-            <button type="button" class="btn btn-danger">Delete</button>
-            <button type="button" class="btn btn-secondary">Archive</button>
-            <span class="float-right">
-              <button type="button" class="btn btn-success">Add project</button>
-              <button type="button" class="btn btn-primary">Submit</button>
-            </span>
+            <a type="button" class="btn btn-danger" href="{% url 'run:run_del' run_id %}">Delete</a>
+            {% if run_satus != 'archived' %}
+              <a type="button" class="btn btn-secondary" href="{% url 'run:run_arch' run_id %}">Archive</a>
+              {% if run_status != 'closed' %}
+                <span class="float-right">
+                  <a type="button" class="btn btn-success" href="{% url 'project:project_set' run_id 0 %}">Add project</a>
+                  <a type="button" class="btn btn-primary" href="{% url 'run:run_sub' run_id %}">Submit run</a>
+                </span>
+              {% endif %}
+            {% endif %}
           </div>
         </div>
       </div>

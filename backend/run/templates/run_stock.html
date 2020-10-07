@@ -33,7 +33,7 @@
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'stock:index' %}">Runs in Stock</a>
+            <a class="nav-link" href="{% url 'run:run_stock' %}">Runs in Stock</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{% url 'primers:index' %}">Primers</a>
@@ -122,7 +122,7 @@
               <form action="{% url 'run:run_new' %}" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="input-group mb-3">
-                  <input type="text" class="form-control" placeholder="Run name" aria-label="Run name" aria-describedby="basic-addon2">
+                  <input type="text" class="form-control" name="run_name" placeholder="Run name" aria-label="Run name">
                   <div class="input-group-append">
                     <button type="submit" class="btn btn-outline btn-success">Create run</button>
                   </div>

@@ -8,22 +8,33 @@ from django.http import Http404
 from django.template import loader
 
 from .models import Project
+from run.models import Run
 from primers.models import Smart, Index
 
 
-def delete(request, project_id):
+def delete(request, run_id, project_id):
+    try:
+        run = Run.objects.get(id=run_id)
+    except Exception:
+        raise Http404("Run does not exist")
+
     try:
         project = Project.objects.get(id=project_id)
     except Project.DoesNotExist:
         raise Http404("Project does not exist")
-    run_id = project.run_id  # save to redirect to Run page
     project.delete()
 
-    return HttpResponseRedirect('/run/get/1/')
+    return HttpResponseRedirect(reverse('run:run_get', args=(run.id,)))
 
 
-def get(request, project_id):
-    if project_id:  # project modification
+def get(request, run_id, project_id):
+    try:
+        run = Run.objects.get(id=run_id)
+    except Exception:
+        raise Http404("Run does not exist")
+
+    if project_id:
+        # project modification
         try:
             project = Project.objects.get(id=project_id)
         except Project.DoesNotExist:
@@ -46,15 +57,10 @@ def get(request, project_id):
             'smart_list': Smart.objects.order_by('id'),
         }
 
-    else:  # project creation
-        run_id = 1
-#        try:
-#            run_id = request.POST['run_id']
-#        except Exception:
-#            raise Http404("Run is not determined")
-
+    else:
+        # project creation
         context = {
-            'run_id': run_id,
+            'run_id': run.id,
             'project_id': 0,
             'index_list': Index.objects.order_by('id'),
             'smart_list': Smart.objects.order_by('id'),
@@ -63,19 +69,21 @@ def get(request, project_id):
     return render(request, 'project.html', context)
 
 
-def set(request, project_id):
+def set(request, run_id, project_id):
     try:
-        run_id = request.POST['run_id']
+        run = Run.objects.get(id=run_id)
     except Exception:
-        raise Http404("Run is not determined")
+        raise Http404("Run does not exist")
 
-    if project_id:  # project modification
+    if project_id:
+        #  project modification
         try:
             project = Project.objects.get(id=project_id)
         except Project.DoesNotExist:
             raise Http404("Project does not exist")
+
         try:
-            project.run_id = run_id
+            project.run_id = run.id
             project.project_name = request.POST['project_name']
             project.sample_id = request.POST['sample_id']
             project.sample_name = request.POST['sample_name']
@@ -91,9 +99,10 @@ def set(request, project_id):
         except Exception as e:
             raise Http404("Bad request for Project")
 
-    else:  # project creation
+    else:
+        #  project creation
         try:
-            project = Project(run_id=run_id,
+            project = Project(run_id=run.id,
                               project_name=request.POST['project_name'],
                               sample_id=request.POST['sample_id'],
                               sample_name=request.POST['sample_name'],
@@ -110,5 +119,5 @@ def set(request, project_id):
         except Exception:
             raise Http404("Bad request for New Project")
 
-    return HttpResponseRedirect('/run/get/1/')
+    return HttpResponseRedirect(reverse('run:run_get', args=(run.id,)))
 

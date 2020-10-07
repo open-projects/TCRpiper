@@ -3,7 +3,7 @@ from django.db import models
 
 class Project(models.Model):
     run_id = models.IntegerField()
-    project_name = models.CharField(max_length=200)
+    name = models.CharField(max_length=200)
     sample_id = models.IntegerField()
     sample_number = models.IntegerField(default=0)  # reserved
     sample_name = models.CharField(max_length=200)
@@ -19,3 +19,5 @@ class Project(models.Model):
     beta_index_id = models.IntegerField()
     beta_index_number = models.IntegerField(default=0)  # reserved
     comments = models.TextField(blank=True)
+    date = models.DateField(auto_now_add=True)
+    owner = models.CharField(max_length=200, default='Unknown')

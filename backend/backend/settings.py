@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     'primers.apps.PrimersConfig',
     'project.apps.ProjectConfig',
     'run.apps.RunConfig',
-    'stock.apps.StockConfig',
 ]
 
 MIDDLEWARE = [
