@@ -1,3 +1,7 @@
+'''
+TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
+'''
+
 from django.db import models
 
 from project.models import Project

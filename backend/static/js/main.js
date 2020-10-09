@@ -1,3 +1,7 @@
+//
+// TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
+//
+
 // check/uncheck checkboxes in a table
 $(".check-all-table").click(function (e) {
     $this = this;  
