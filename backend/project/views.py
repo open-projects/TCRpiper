@@ -7,7 +7,7 @@ from django.http import HttpResponseNotFound
 from django.http import Http404
 from django.template import loader
 
-from .models import Project
+from .models import Project, UsedBarcode
 from run.models import Run
 from primers.models import Smart, Index
 
@@ -64,16 +64,8 @@ def get(request, run_id, project_id=0):
                 'smart_list': smart_list,
                 'used_barcodes': list(),
             }
-
-        used_barcodes.append(
-            {
-             'project_id': project.id,
-             'project_owner': project.owner,
-             'alfa_index_id': project.alfa_index_id,
-             'beta_index_id': project.beta_index_id,
-             'smart_id': project.smart_id,
-             }
-        )
+        barcode = UsedBarcode(project)
+        used_barcodes.append(barcode)
 
     context['used_barcodes'] = used_barcodes
     return render(request, 'project.html', context)

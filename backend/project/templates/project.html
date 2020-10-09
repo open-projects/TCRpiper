@@ -215,7 +215,7 @@
                                     <tbody>
                                     {% for index in index_list %}
                                       <tr class="dropdown-item" name="{{ index.number }}" id="betaindexCheck{{ index.id }}">
-                                        <th scope="row" class="betaindexid">{{index.number}}</th>
+                                        <th scope="row" class="betaindexid">{{ index.number }}</th>
                                         <td class="betaindexseq">{{ index.seq }}</td>
                                       </tr>
                                     {% endfor %}
@@ -243,46 +243,22 @@
                         <thead>
                           <tr>
                             <th scope="col">Project ID</th>
+                            <th scope="col">Smart ID</th>
                             <th scope="col">Alfa Index ID</th>
                             <th scope="col">Beta Index ID</th>
-                            <th scope="col">Smart ID</th>
                           </tr>
                         </thead>
                         <tbody>
                           {% for bcode in used_barcodes %}
-                            <th scope="row" class="projectid">bcode.project_id</th>
-                            <td><span class="alfaindexid">bcode.alfa_index_id</span> (<span class="alfaindexseq">CAGATC</span>)</td>
-                            <td><span class="betaindexid">bcode.beta_index_id</span> (<span class="betaindexseq">CAGATC</span>)</td>
-                            <td><span class="smartid">bcode.smart_id</span> (<span class="smartseq">CAGATC</span>)</td>
+                            <th scope="row" class="projectid">{{ bcode.project_id }}</th>
+                            <td><span class="smartid">{{ bcode.smart_id }}</span></td>
+                            <td><span class="alfaindexid">{{ bcode.alfa_index_id }}</span></td>
+                            <td><span class="betaindexid">{{ bcode.beta_index_id }}</span></td>
                           {% endfor %}
-                          <tr>
-                            <th scope="row" class="projectid">1</th>
-                            <td><span class="alfaindexid">1</span> (<span class="alfaindexseq">CAGATC</span>)</td>
-                            <td><span class="betaindexid">4</span> (<span class="betaindexseq">CAGATC</span>)</td>
-                            <td><span class="smartid">2</span> (<span class="smartseq">CAGATC</span>)</td>
-                          </tr>
-                          <tr>
-                            <th scope="row" class="projectid">2</th>
-                            <td><span class="alfaindexid">34</span> (<span class="alfaindexseq">CAGATC</span>)</td>
-                            <td><span class="betaindexid">24</span> (<span class="betaindexseq">CAGATC</span>)</td>
-                            <td><span class="smartid">5</span> (<span class="smartseq">CAGATC</span>)</td>
-                          </tr>
-                          <tr>
-                            <th scope="row" class="projectid">3</th>
-                            <td><span class="alfaindexid">7</span> (<span class="alfaindexseq">CAGATC</span>)</td>
-                            <td><span class="betaindexid">35</span> (<span class="betaindexseq">CAGATC</span>)</td>
-                            <td><span class="smartid">9</span> (<span class="smartseq">CAGATC</span>)</td>
-                          </tr>
-                          <tr>
-                            <th scope="row" class="projectid">4</th>
-                            <td><span class="alfaindexid">23</span> (<span class="alfaindexseq">CAGATC</span>)</td>
-                            <td><span class="betaindexid">11</span> (<span class="betaindexseq">CAGATC</span>)</td>
-                            <td><span class="smartid">44</span> (<span class="smartseq">CAGATC</span>)</td>
-                          </tr>
                         </tbody>
                       </table>
                       <div class="float-right">
-                        <button type="button" class="btn btn-primary hidden" data-toggle="collapse" data-target="#ids">Show/Hide used IDs</button>
+                        <button type="button" class="btn btn-primary hidden" data-toggle="collapse" data-target="#ids">Show/Hide used primers</button>
                       </div>
                     </div>
                   </div>

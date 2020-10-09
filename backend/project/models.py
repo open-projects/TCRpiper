@@ -21,3 +21,12 @@ class Project(models.Model):
     comments = models.TextField(blank=True)
     date = models.DateField(auto_now_add=True)
     owner = models.CharField(max_length=200, default='Unknown')
+
+
+class UsedBarcode:
+    def __init__(self, project):
+        self.project_id = project.id
+        self.owner = project.owner
+        self.smart_id = project.smart_id
+        self.alfa_index_id = project.alfa_index_id
+        self.beta_index_id = project.beta_index_id
