@@ -1,5 +1,5 @@
 '''
-TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
+TCRpiper - a pipeline for TCR sequence treatment. Copyright (C) 2020  D. Malko
 '''
 
 from django.db import models
@@ -34,3 +34,17 @@ class UsedBarcode:
         self.smart_id = project.smart_id
         self.alfa_index_id = project.alfa_index_id
         self.beta_index_id = project.beta_index_id
+
+
+class IdContainer:
+    def __init__(self):
+        self.barcodes = list()
+        self.smarts = set()
+        self.indexes = set()
+
+    def append(self, barcode):
+        self.barcodes.append(barcode)
+        self.smarts.add(barcode.smart_id)
+        self.indexes.add(barcode.alfa_index_id)
+        self.indexes.add(barcode.beta_index_id)
+

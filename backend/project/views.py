@@ -1,5 +1,5 @@
 '''
-TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
+TCRpiper - a pipeline for TCR sequence treatment. Copyright (C) 2020  D. Malko
 '''
 
 from django.shortcuts import render
@@ -11,7 +11,7 @@ from django.http import HttpResponseNotFound
 from django.http import Http404
 from django.template import loader
 
-from .models import Project, UsedBarcode
+from .models import Project, UsedBarcode, IdContainer
 from run.models import Run
 from primers.models import Smart, Index
 
@@ -44,10 +44,9 @@ def get(request, run_id, project_id=0):
         'project_id': 0,
         'index_list': index_list,
         'smart_list': smart_list,
-        'used_barcodes': list(),
     }
 
-    used_barcodes = list()
+    used_barcodes = IdContainer()
     for project in Project.objects.filter(id=project_id):
         if project.id == project_id:
             context = {  # for project modification
@@ -66,7 +65,6 @@ def get(request, run_id, project_id=0):
                 'comments': project.comments,
                 'index_list': index_list,
                 'smart_list': smart_list,
-                'used_barcodes': list(),
             }
         barcode = UsedBarcode(project)
         used_barcodes.append(barcode)

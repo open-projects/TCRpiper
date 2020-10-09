@@ -1,5 +1,5 @@
 """
-TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
+TCRpiper - a pipeline for TCR sequence treatment. Copyright (C) 2020  D. Malko
 """
 from django.contrib import admin
 from django.urls import include, path, re_path

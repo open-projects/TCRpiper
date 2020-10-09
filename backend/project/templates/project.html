@@ -1,5 +1,5 @@
 <!--
-TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
+TCRpiper - a pipeline for TCR sequence treatment. Copyright (C) 2020  D. Malko
 -->
 
 {% load static %}
@@ -22,6 +22,7 @@ TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
 
   <!-- Custom styles for this template -->
   <link href="{% static "css/main.css" %}" rel="stylesheet">
+  <link href="{% static "css/project.css" %}" rel="stylesheet">
 
 </head>
 
@@ -177,8 +178,13 @@ TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
                                     <tbody>
                                       {% for index in index_list %}
                                         <tr class="dropdown-item" name="{{ index.number }}" id="alfaindexCheck{{ index.id }}">
-                                          <th scope="row" class="alfaindexid">{{index.number}}</th>
-                                          <td class="alfaindexseq">{{ index.seq }}</td>
+                                          {% if index.number in used_barcodes.indexes %}
+                                            <th scope="row" class="alfaindexid used_barcode">{{index.number}}</th>
+                                            <td class="alfaindexseq used_barcode">{{ index.seq }}</td>
+                                          {% else %}
+                                            <th scope="row" class="alfaindexid">{{index.number}}</th>
+                                            <td class="alfaindexseq">{{ index.seq }}</td>
+                                          {% endif %}
                                         </tr>
                                       {% endfor %}
                                     </tbody>
@@ -219,8 +225,13 @@ TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
                                     <tbody>
                                     {% for index in index_list %}
                                       <tr class="dropdown-item" name="{{ index.number }}" id="betaindexCheck{{ index.id }}">
-                                        <th scope="row" class="betaindexid">{{ index.number }}</th>
-                                        <td class="betaindexseq">{{ index.seq }}</td>
+                                        {% if index.number in used_barcodes.indexes %}
+                                          <th scope="row" class="betaindexid used_barcode">{{ index.number }}</th>
+                                          <td class="betaindexseq used_barcode">{{ index.seq }}</td>
+                                        {% else %}
+                                          <th scope="row" class="betaindexid">{{ index.number }}</th>
+                                          <td class="betaindexseq">{{ index.seq }}</td>
+                                        {% endif %}
                                       </tr>
                                     {% endfor %}
                                     </tbody>
@@ -253,7 +264,7 @@ TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
                           </tr>
                         </thead>
                         <tbody>
-                          {% for bcode in used_barcodes %}
+                          {% for bcode in used_barcodes.barcodes %}
                             <th scope="row" class="projectid">{{ bcode.project_id }}</th>
                             <td><span class="smartid">{{ bcode.smart_id }}</span></td>
                             <td><span class="alfaindexid">{{ bcode.alfa_index_id }}</span></td>
