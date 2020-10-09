@@ -37,7 +37,7 @@ def get(request, run_id):
     project_list = Project.objects.filter(run_id=run.id)
     context = {
         'run_id': run_id,
-        'run_satus': run.status,
+        'run_status': run.status,
         'project_list': project_list,
         'num_of_projects': len(project_list)
     }
@@ -50,10 +50,11 @@ def delete(request, run_id):
         run = Run.objects.get(id=run_id)
     except Exception:
         raise Http404("Run does not exist")
-    run.delete()
 
     for project in Project.objects.filter(run_id=run_id):
         project.delete()
+
+    run.delete()
 
     return HttpResponseRedirect(reverse('run:run_stock'))
 

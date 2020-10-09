@@ -249,6 +249,12 @@
                           </tr>
                         </thead>
                         <tbody>
+                          {% for bcode in used_barcodes %}
+                            <th scope="row" class="projectid">bcode.project_id</th>
+                            <td><span class="alfaindexid">bcode.alfa_index_id</span> (<span class="alfaindexseq">CAGATC</span>)</td>
+                            <td><span class="betaindexid">bcode.beta_index_id</span> (<span class="betaindexseq">CAGATC</span>)</td>
+                            <td><span class="smartid">bcode.smart_id</span> (<span class="smartseq">CAGATC</span>)</td>
+                          {% endfor %}
                           <tr>
                             <th scope="row" class="projectid">1</th>
                             <td><span class="alfaindexid">1</span> (<span class="alfaindexseq">CAGATC</span>)</td>
@@ -293,7 +299,7 @@
             </div>
             <div class="card-footer">
               {% if project_id %}
-              <a type="button" class="btn btn-danger" id="deleteProject" href="{% url 'project:project_del' project_id %}">Delete</a>
+              <a type="button" class="btn btn-danger" id="deleteProject" href="{% url 'project:project_del' run_id project_id %}">Delete</a>
               {% else %}
               <button type="button" class="btn invisible">placeholder</button>
               {% endif %}

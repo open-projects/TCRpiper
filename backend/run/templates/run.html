@@ -84,7 +84,7 @@
               </thead>
               <tbody>
                 {% for project in project_list %}
-                  <tr onclick="location.href={% url 'project:project_get' run_id project_id %}" style="cursor:pointer;">
+                  <tr onclick="location.href='{% url 'project:project_get' run_id project.id %}'" style="cursor:pointer;">
                     <th scope="row">{{ project.id }}</th>
                     <td>{{ project.name }}</td>
                     <td>{{ project.owner }}</td>
@@ -96,12 +96,13 @@
             </table>
           </div>
           <div class="card-footer">
-            <a type="button" class="btn btn-danger" href="{% url 'run:run_del' run_id %}">Delete</a>
-            {% if run_satus != 'archived' %}
+            {% if run_status == 'archived' %}
+              <a type="button" class="btn btn-danger" href="{% url 'run:run_del' run_id %}">Delete</a>
+            {% elif run_status != 'archived' %}
               <a type="button" class="btn btn-secondary" href="{% url 'run:run_arch' run_id %}">Archive</a>
               {% if run_status != 'closed' %}
                 <span class="float-right">
-                  <a type="button" class="btn btn-success" href="{% url 'project:project_set' run_id 0 %}">Add project</a>
+                  <a type="button" class="btn btn-success" href="{% url 'project:project_new' run_id %}">Add project</a>
                   <a type="button" class="btn btn-primary" href="{% url 'run:run_sub' run_id %}">Submit run</a>
                 </span>
               {% endif %}
