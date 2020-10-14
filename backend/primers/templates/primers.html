@@ -95,7 +95,7 @@ TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
                       <table class="table table-hover">
                         <thead>
                           <tr>
-                            <th scope="col">
+                            <th scope="col" style="width:8em;">
                               <div class="custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input check-all-table" id="indexCheck0">
                                 <label class="custom-control-label" for="indexCheck0">
@@ -105,7 +105,7 @@ TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
                             </th>
                             <th scope="col">Sequence</th>
                             <th scope="col">Source</th>
-                            <th scope="col">Date</th>
+                            <th scope="col" style="width:8em;">Date</th>
                             <th scope="col">Comments</th>
                           </tr>
                         </thead>
@@ -116,7 +116,7 @@ TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
                               <div class="custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input" name="indexCheck{{ index.id }}" id="indexCheck{{ index.id }}">
                                 <label class="custom-control-label" for="indexCheck{{ index.id }}">
-                                  {{ index.number }}
+                                  {{ index.name }}
                                 </label>
                               </div>
                             </td>
@@ -213,7 +213,7 @@ TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
                       <tbody>
                       {% for index in duplicate_indexes %}
                         <tr>
-                          <td>{{ index.number }}</td>
+                          <td>{{ index.name }}</td>
                           <td>{{ index.seq }}</td>
                           <td>{{ index.source }}</td>
                           <td>{{ index.date }}</td>
@@ -244,7 +244,7 @@ TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
                       <table class="table table-hover">
                         <thead>
                           <tr>
-                            <th scope="col">
+                            <th scope="col" style="width:8em;">
                               <div class="custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input check-all-table" id="smartCheck0">
                                 <label class="custom-control-label" for="smartCheck0">
@@ -254,7 +254,7 @@ TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
                             </th>
                             <th scope="col">Sequence</th>
                             <th scope="col">Source</th>
-                            <th scope="col">Date</th>
+                            <th scope="col" style="width:8em;">Date</th>
                             <th scope="col">Comments</th>
                           </tr>
                         </thead>
@@ -265,7 +265,7 @@ TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
                               <div class="custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input" name="smartCheck{{ smart.id }}" id="smartCheck{{ smart.id }}">
                                 <label class="custom-control-label" for="smartCheck{{ smart.id }}">
-                                  {{smart.number}}
+                                  {{smart.name}}
                                 </label>
                               </div>
                             </td>
@@ -366,7 +366,7 @@ TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
                             <div class="custom-control custom-checkbox">
                               <input type="checkbox" class="custom-control-input" id="smartDuplicate{{ smart.id }}">
                               <label class="custom-control-label" for="smartDuplicate{{ smart.id }}">
-                                {{ smart.number }}
+                                {{ smart.name }}
                               </label>
                             </div>
                           </td>

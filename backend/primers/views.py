@@ -8,7 +8,7 @@ from django.utils.encoding import smart_str
 import re
 from datetime import datetime
 
-from .models import Smart, Index
+from .models import Smart, Index, norm_index_type
 
 
 def index(request):
@@ -35,30 +35,37 @@ def index(request):
                 csvfile = request.FILES[file_type]
                 for row in re.split(r'\n', smart_str(csvfile.read())):
                     fields = re.split(r'\t', row)
-                    nmb = fields[0]
-                    if len(fields) == 5 and re.match(r'\d+', nmb):
-                        sq = fields[1]
-                        src = fields[2] if len(fields[2]) > 0 else 'Unknown'
-                        dt = fields[3] if len(fields[3]) > 0 else datetime.today().strftime('%Y-%m-%d') # add date/time convertation for input data
-                        cmt = fields[4] if len(fields[4]) > 0 else 'No comments'
-                        if file_type == 'inputIndexFile':
-                            index = Index(number=nmb, seq=sq, source=src, date=dt, comment=cmt)
-                            if Index.objects.filter(number=nmb).exists() or Index.objects.filter(seq=sq).exists():
-                                duplicate_indexes.append(index)
-                            else:
-                                index.save()
-                                if num_uploaded_indexes == -1:
-                                    num_uploaded_indexes = 0
-                                num_uploaded_indexes += 1
-                        elif file_type == 'inputSmartFile':
-                            smart = Smart(number=nmb, seq=sq, source=src, date=dt, comment=cmt)
-                            if Smart.objects.filter(number=nmb).exists() or Smart.objects.filter(seq=sq).exists():
-                                duplicate_smarts.append(smart)
-                            else:
-                                smart.save()
-                                if num_uploaded_smarts == -1:
-                                    num_uploaded_smarts = 0
-                                num_uploaded_smarts += 1
+                    if file_type == 'inputIndexFile':
+                        if len(fields) == 5 and not re.match(r'source', fields[0]):
+                            src = fields[0]
+                            tp = norm_index_type(fields[1])
+                            nm = fields[2]
+                            sq = fields[3]
+                            cmt = fields[4]
+                            if len(src) > 0 and len(nm) > 0 and len(sq) > 0 and len(tp) > 0:
+                                index = Index(name=nm, type=tp, seq=sq, source=src, comment=cmt)
+                                if Index.objects.filter(name=nm).exists() or Index.objects.filter(seq=sq).exists():
+                                    duplicate_indexes.append(index)
+                                else:
+                                    index.save()
+                                    if num_uploaded_indexes == -1:
+                                        num_uploaded_indexes = 0
+                                    num_uploaded_indexes += 1
+                    elif file_type == 'inputSmartFile':
+                        if len(fields) == 4 and not re.match(r'source', fields[0]):
+                            src = fields[0]
+                            nm = fields[1]
+                            sq = fields[2]
+                            cmt = fields[3]
+                            if len(src) > 0 and len(nm) > 0 and len(sq) > 0:
+                                smart = Smart(name=nm, seq=sq, source=src, comment=cmt)
+                                if Smart.objects.filter(name=nm).exists() or Smart.objects.filter(seq=sq).exists():
+                                    duplicate_smarts.append(smart)
+                                else:
+                                    smart.save()
+                                    if num_uploaded_smarts == -1:
+                                        num_uploaded_smarts = 0
+                                    num_uploaded_smarts += 1
         else:
             # delete data from models
             pattern_index = re.compile(r'indexCheck(\d+)')
