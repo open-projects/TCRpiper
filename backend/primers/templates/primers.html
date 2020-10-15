@@ -105,8 +105,8 @@ TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
                             </th>
                             <th scope="col">Sequence</th>
                             <th scope="col">Source</th>
-                            <th scope="col" style="width:8em;">Date</th>
                             <th scope="col">Comments</th>
+                            <th scope="col" style="width:8em;">Date</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -120,10 +120,10 @@ TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
                                 </label>
                               </div>
                             </td>
-                            <td>{{ index.seq }}</td>
+                            <td>{{ index.seqmarked }}</td>
                             <td>{{ index.source }}</td>
-                            <td>{{ index.date }}</td>
                             <td>{{ index.comment }}</td>
+                            <td>{{ index.date }}</td>
                           </tr>
                         {% endfor %}
                         </tbody>
@@ -203,11 +203,9 @@ TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
                     <table class="table table-hover">
                       <thead>
                         <tr>
-                          <th scope="col">ID</th>
+                          <th scope="col" style="width:8em;">ID</th>
                           <th scope="col">Sequence</th>
                           <th scope="col">Source</th>
-                          <th scope="col">Date</th>
-                          <th scope="col">Comments</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -216,8 +214,6 @@ TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
                           <td>{{ index.name }}</td>
                           <td>{{ index.seq }}</td>
                           <td>{{ index.source }}</td>
-                          <td>{{ index.date }}</td>
-                          <td>{{ index.comment }}</td>
                         </tr>
                       {% endfor %}
                       </tbody>
@@ -254,8 +250,8 @@ TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
                             </th>
                             <th scope="col">Sequence</th>
                             <th scope="col">Source</th>
-                            <th scope="col" style="width:8em;">Date</th>
                             <th scope="col">Comments</th>
+                            <th scope="col" style="width:8em;">Date</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -269,10 +265,10 @@ TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
                                 </label>
                               </div>
                             </td>
-                            <td>{{ smart.seq }}</td>
+                            <td>{{ smart.seqmarked }}</td>
                             <td>{{ smart.source }}</td>
-                            <td>{{ smart.date }}</td>
                             <td>{{ smart.comment }}</td>
+                            <td>{{ smart.date }}</td>
                           </tr>
                         {% endfor %}
                         </tbody>
@@ -352,28 +348,17 @@ TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
                     <table class="table table-hover">
                       <thead>
                         <tr>
-                          <th scope="col">ID</th>
+                          <th scope="col" style="width:8em;">ID</th>
                           <th scope="col">Sequence</th>
                           <th scope="col">Source</th>
-                          <th scope="col">Date</th>
-                          <th scope="col">Comments</th>
                         </tr>
                       </thead>
                       <tbody>
                       {% for smart in duplicate_smarts %}
                         <tr>
-                          <td>
-                            <div class="custom-control custom-checkbox">
-                              <input type="checkbox" class="custom-control-input" id="smartDuplicate{{ smart.id }}">
-                              <label class="custom-control-label" for="smartDuplicate{{ smart.id }}">
-                                {{ smart.name }}
-                              </label>
-                            </div>
-                          </td>
+                          <td>{{ smart.name }}</td>
                           <td>{{ smart.seq }}</td>
                           <td>{{ smart.source }}</td>
-                          <td>{{ smart.date }}</td>
-                          <td>{{ smart.comment }}</td>
                         </tr>
                       {% endfor %}
                       </tbody>

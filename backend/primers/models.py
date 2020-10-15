@@ -3,7 +3,7 @@ TCRpiper - a pipeline for TCR sequence treatment. Copyright (C) 2020  D. Malko
 '''
 
 from django.db import models
-
+import re
 
 INDEX_TYPE = (('alfa', 'Alfa'), ('beta', 'Beta'))
 
@@ -23,6 +23,21 @@ class Smart(models.Model):
     source = models.CharField(max_length=200)
     date = models.DateField(auto_now_add=True)
     comment = models.TextField(default='')
+    seqcore = models.CharField(max_length=200, default='')
+    seqmarked = models.CharField(max_length=200, default='')
+
+    @classmethod
+    def create(cls, name, seq, source, comment=''):
+        seq = seq.upper()
+        pattern = re.search(r'([^N]*)(N[NATGCU]+)(.*)', seq)
+        if pattern:
+            subseq = pattern.group(2)
+            subseq = re.sub(r'U', 'T', subseq)
+            seqm = pattern.group(1).lower() + subseq + pattern.group(3).lower()
+        else:
+            raise Exception("Can't find a barcode pattern in the smart sequence.")
+
+        return cls(name=name, seq=seq, source=source, comment=comment, seqcore=subseq, seqmarked=seqm)
 
 
 class Index(models.Model):
@@ -32,4 +47,19 @@ class Index(models.Model):
     source = models.CharField(max_length=200)
     date = models.DateField(auto_now_add=True)
     comment = models.TextField(default='')
+    seqcore = models.CharField(max_length=200, default='')
+    seqmarked = models.CharField(max_length=200, default='')
+
+    @classmethod
+    def create(cls, name, type, seq, source, comment=''):
+        seq = seq.upper()
+        pattern = re.search(r'^(.{24})([NATGCU]{6})(.*)', seq)
+        if pattern:
+            subseq = pattern.group(2)
+            subseq = re.sub(r'U', 'T', subseq)
+            seqm = pattern.group(1).lower() + subseq + pattern.group(3).lower()
+        else:
+            raise Exception("Can't find a barcode pattern in the index sequence.")
+
+        return cls(name=name, type=type, seq=seq, source=source, comment=comment, seqcore=subseq, seqmarked=seqm)
 

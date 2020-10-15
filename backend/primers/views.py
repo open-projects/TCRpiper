@@ -43,7 +43,7 @@ def index(request):
                             sq = fields[3]
                             cmt = fields[4]
                             if len(src) > 0 and len(nm) > 0 and len(sq) > 0 and len(tp) > 0:
-                                index = Index(name=nm, type=tp, seq=sq, source=src, comment=cmt)
+                                index = Index.create(nm, tp, sq.upper(), src, cmt)
                                 if Index.objects.filter(name=nm).exists() or Index.objects.filter(seq=sq).exists():
                                     duplicate_indexes.append(index)
                                 else:
@@ -58,7 +58,7 @@ def index(request):
                             sq = fields[2]
                             cmt = fields[3]
                             if len(src) > 0 and len(nm) > 0 and len(sq) > 0:
-                                smart = Smart(name=nm, seq=sq, source=src, comment=cmt)
+                                smart = Smart.create(nm, sq.upper(), src, cmt)
                                 if Smart.objects.filter(name=nm).exists() or Smart.objects.filter(seq=sq).exists():
                                     duplicate_smarts.append(smart)
                                 else:
