@@ -5,6 +5,7 @@ TCRpiper - a pipeline for TCR sequence treatment. Copyright (C) 2020  D. Malko
 from django.db import models
 import re
 
+
 INDEX_TYPE = (('alfa', 'Alfa'), ('beta', 'Beta'))
 
 
