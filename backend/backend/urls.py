@@ -11,6 +11,8 @@ urlpatterns = [
     path(r'primers/', include('primers.urls')),
     path(r'project/', include('project.urls')),
     path(r'run/', include('run.urls')),
+    path(r'experiment/', include('experiment.urls')),
+    path(r'sample/', include('sample.urls')),
     #re_path(r'^$', include('tcrpiper.urls')),
 ]
 
