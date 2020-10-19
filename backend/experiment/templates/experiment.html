@@ -153,14 +153,6 @@ TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
                         </div>
                       </div>
                     </div>
-                    <div class="card-footer bg-white">
-                      <button type="submit" class="btn btn-primary invisible">Submit</button>
-                      {% if experiment_status != 'archived' and experiment_status != 'closed' %}
-                        <span class="float-right">
-                          <a type="button" class="btn btn-success" href="{% url 'sample:sample_save' experiment_id %}">Save</a>
-                        </span>
-                      {% endif %}
-                    </div>
                   </div>
                 </div>
               </div>
@@ -194,13 +186,6 @@ TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
                       </tbody>
                     </table>
                   </div>
-                  <div class="card-footer bg-white">
-                    {% if experiment_status != 'archived' and experiment_status != 'closed' %}
-                      <span class="float-right">
-                        <a type="button" class="btn btn-success" href="{% url 'sample:sample_new' experiment_id %}">Add sample</a>
-                      </span>
-                    {% endif %}
-                  </div>
                 </div>
               </div>
             </div>
@@ -211,11 +196,16 @@ TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
             {% elif experiment_status != 'archived' %}
               <a type="button" class="btn btn-secondary" href="{% url 'experiment:experiment_arch' experiment_id %}">Archive</a>
               {% if experiment_status != 'closed' %}
-                <span class="float-right">
-                  <button type="button" class="btn btn-primary">Submit</button>
-                </span>
+                <button type="button" class="btn btn-primary">Submit</button>
               {% endif %}
             {% endif %}
+            {% if experiment_status != 'archived' and experiment_status != 'closed' %}
+              <span class="float-right">
+                <a type="button" class="btn btn-default" href="{% url 'sample:sample_new' experiment_id %}">Add sample</a>
+                <button type="button" class="btn btn-success">Save</button>
+              </span>
+            {% endif %}
+
           </div>
         </div>
       </div>
