@@ -69,35 +69,141 @@ TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
         </div>
       </div>
     </div>
-
-    <!-- Centered Row -->
     <div class="row">
       <div class="col-md-12 mb-5">
         <div class="card h-100">
-          <div class="card-header">List of samples</div>
-          <div class="card-body scroll">
-            <table class="table table-hover">
-              <thead>
-                <tr>
-                  <th scope="col">Sample ID</th>
-                  <th scope="col">Name</th>
-                  <th scope="col">Owner</th>
-                  <th scope="col">Created</th>
-                  <th scope="col">Comments</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for sample in sample_list %}
-                  <tr onclick="location.href='{% url 'sample:sample_get' experiment_id sample.id %}'" style="cursor:pointer;">
-                    <th scope="row">{{ sample.id }}</th>
-                    <td>{{ sample.name }}</td>
-                    <td>{{ sample.owner }}</td>
-                    <td>{{ sample.date }}</td>
-                    <td>{{ sample.comments }}</td>
-                  </tr>
-                {% endfor %}
-              </tbody>
-            </table>
+          <div class="card-body">
+            <form action="{% url 'experiment:experiment_sub' experiment_id %}" method="post" enctype="multipart/form-data">
+              {% csrf_token %}
+              <!-- Settings -->
+              <div class="row">
+                <div class="col-md-12 mb-5">
+                  <div class="card h-100">
+                    <div class="card-header">Settings</div>
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col-md-10 mb-3">
+                          <label for="experiment_name">Experiment name</label>
+                          <input type="text" class="form-control" name="experiment_name" id="experiment_name" placeholder="Name" value="{{ experiment_name }}">
+                          <div class="invalid-feedback">
+                            Valid Experiment name is required.
+                          </div>
+                        </div>
+                        <div class="col-md-2 mb-3">
+                          <label for="iem_file_version">IEM File Version</label>
+                          <input type="text" class="form-control" name="iem_file_version" id="iem_file_version" placeholder="4" value="{{ iem_file_version }}">
+                          <div class="invalid-feedback">
+                            Please enter a valid file version.
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-12 mb-3">
+                          <label for="description">Description</label>
+                          <input type="text" class="form-control" name="description" id="description" placeholder="Short description" value="{{ description }}">
+                          <div class="invalid-feedback">
+                            Valid description is required.
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-4 mb-3">
+                          <label for="workflow">Workflow</label>
+                          <input type="text" class="form-control" name="workflow" id="workflow" placeholder="GenerateFASTQ" value="{{ workflow }}">
+                          <div class="invalid-feedback">
+                            Valid workflow is required.
+                          </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                          <label for="application">Application</label>
+                          <input type="text" class="form-control" name="application" id="application" placeholder="FASTQ Only" value="{{ application }}">
+                          <div class="invalid-feedback">
+                            Valid application is required.
+                          </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                          <label for="chemistry">Chemistry</label>
+                          <input type="text" class="form-control" name="chemistry" id="chemistry" placeholder="Amplicon" value="{{ chemistry }}">
+                          <div class="invalid-feedback">
+                            Please enter a valid chemistry.
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-4 mb-3">
+                          <label for="reads_1">Reads 1</label>
+                          <input type="text" class="form-control" name="reads_1" id="reads_1" placeholder="150" value="{{ reads_1 }}">
+                          <div class="invalid-feedback">
+                            Valid number of reads is required.
+                          </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                          <label for="reads_2">Reads 2</label>
+                          <input type="text" class="form-control" name="reads_2" id="reads_2" placeholder="150" value="{{ reads_2 }}">
+                          <div class="invalid-feedback">
+                            Valid number of reads is required.
+                          </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                          <label for="reverse_complement">ReverseComplement</label>
+                          <input type="text" class="form-control" name="reverse_complement" id="reverse_complement" placeholder="0/1" value="{{ reverse_complement }}">
+                          <div class="invalid-feedback">
+                            Valid value for ReverseComplement is required.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="card-footer bg-white">
+                      <button type="submit" class="btn btn-primary invisible">Submit</button>
+                      {% if experiment_status != 'archived' and experiment_status != 'closed' %}
+                        <span class="float-right">
+                          <a type="button" class="btn btn-success" href="{% url 'sample:sample_save' experiment_id %}">Save</a>
+                        </span>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+            <!-- List of Samples -->
+            <div class="row">
+              <div class="col-md-12 mb-5">
+                <div class="card h-100">
+                  <div class="card-header">List of samples</div>
+                  <div class="card-body scroll">
+                    <table class="table table-hover">
+                      <thead>
+                        <tr>
+                          <th scope="col">Sample ID</th>
+                          <th scope="col">Name</th>
+                          <th scope="col">Owner</th>
+                          <th scope="col">Created</th>
+                          <th scope="col">Comments</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for sample in sample_list %}
+                          <tr onclick="location.href='{% url 'sample:sample_get' experiment_id sample.id %}'" style="cursor:pointer;">
+                            <th scope="row">{{ sample.id }}</th>
+                            <td>{{ sample.name }}</td>
+                            <td>{{ sample.owner }}</td>
+                            <td>{{ sample.date }}</td>
+                            <td>{{ sample.comments }}</td>
+                          </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="card-footer bg-white">
+                    {% if experiment_status != 'archived' and experiment_status != 'closed' %}
+                      <span class="float-right">
+                        <a type="button" class="btn btn-success" href="{% url 'sample:sample_new' experiment_id %}">Add sample</a>
+                      </span>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
           <div class="card-footer">
             {% if experiment_status == 'archived' %}
@@ -106,8 +212,7 @@ TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
               <a type="button" class="btn btn-secondary" href="{% url 'experiment:experiment_arch' experiment_id %}">Archive</a>
               {% if experiment_status != 'closed' %}
                 <span class="float-right">
-                  <a type="button" class="btn btn-success" href="{% url 'sample:sample_new' experiment_id %}">Add new project</a>
-                  <a type="button" class="btn btn-primary" href="{% url 'experiment:experiment_sub' experiment_id %}">Submit</a>
+                  <button type="button" class="btn btn-primary">Submit</button>
                 </span>
               {% endif %}
             {% endif %}

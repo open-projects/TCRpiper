@@ -132,3 +132,12 @@ def set(request, experiment_id, sample_id=0):
 
     return HttpResponseRedirect(reverse('experiment:experiment_get', args=(experiment.id,)))
 
+
+def save(request, experiment_id):
+    try:
+        experiment = Experiment.objects.get(id=experiment_id)
+    except Exception:
+        raise Http404("Experiment does not exist")
+
+    return HttpResponseRedirect(reverse('experiment:experiment_get', args=(experiment.id,)))
+
