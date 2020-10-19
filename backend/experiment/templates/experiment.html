@@ -37,7 +37,7 @@ TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'experiment:experiment_stock' %}">SetUp</a>
+            <a class="nav-link" href="{% url 'experiment:experiment_stock' %}">Experiments</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{% url 'primers:index' %}">Primers</a>
@@ -64,7 +64,7 @@ TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
           <div class="card-body">
            <h2 class="card-title"><p class="text-primary">Experiment #{{ experiment_id }}</p></h2>
            <hr class="my-3">
-           <h4 class="text-secondary">{{ num_of_projects }} project(s) in the experiment</h4>
+           <h4 class="text-secondary">{{ num_of_samples }} sample(s) in the experiment</h4>
           </div>
         </div>
       </div>
@@ -74,12 +74,12 @@ TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
     <div class="row">
       <div class="col-md-12 mb-5">
         <div class="card h-100">
-          <div class="card-header">List of projects</div>
+          <div class="card-header">List of samples</div>
           <div class="card-body scroll">
             <table class="table table-hover">
               <thead>
                 <tr>
-                  <th scope="col">Project ID</th>
+                  <th scope="col">Sample ID</th>
                   <th scope="col">Name</th>
                   <th scope="col">Owner</th>
                   <th scope="col">Created</th>
@@ -87,13 +87,13 @@ TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
                 </tr>
               </thead>
               <tbody>
-                {% for project in project_list %}
-                  <tr onclick="location.href='{% url 'project:project_get' experiment_id project.id %}'" style="cursor:pointer;">
-                    <th scope="row">{{ project.id }}</th>
-                    <td>{{ project.name }}</td>
-                    <td>{{ project.owner }}</td>
-                    <td>{{ project.date }}</td>
-                    <td>{{ project.comments }}</td>
+                {% for sample in sample_list %}
+                  <tr onclick="location.href='{% url 'sample:sample_get' experiment_id sample.id %}'" style="cursor:pointer;">
+                    <th scope="row">{{ sample.id }}</th>
+                    <td>{{ sample.name }}</td>
+                    <td>{{ sample.owner }}</td>
+                    <td>{{ sample.date }}</td>
+                    <td>{{ sample.comments }}</td>
                   </tr>
                 {% endfor %}
               </tbody>
@@ -106,8 +106,8 @@ TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
               <a type="button" class="btn btn-secondary" href="{% url 'experiment:experiment_arch' experiment_id %}">Archive</a>
               {% if experiment_status != 'closed' %}
                 <span class="float-right">
-                  <a type="button" class="btn btn-success" href="{% url 'project:project_new' experiment_id %}">Add project</a>
-                  <a type="button" class="btn btn-primary" href="{% url 'experiment:experiment_sub' experiment_id %}">Submit experiment</a>
+                  <a type="button" class="btn btn-success" href="{% url 'sample:sample_new' experiment_id %}">Add new project</a>
+                  <a type="button" class="btn btn-primary" href="{% url 'experiment:experiment_sub' experiment_id %}">Submit</a>
                 </span>
               {% endif %}
             {% endif %}

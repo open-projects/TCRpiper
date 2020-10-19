@@ -12,6 +12,8 @@ INDEX_TYPE = (('alfa', 'Alfa'), ('beta', 'Beta'))
 def norm_index_type(type):
     if len(type) > 0:
         type = type.lower()
+        if type == 'alpha':
+            type = 'alfa'
         for itype in INDEX_TYPE:
             if type == itype[0]:
                 return type

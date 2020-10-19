@@ -10,7 +10,7 @@ from . import views
 app_name = 'sample'
 urlpatterns = [
     path('get/<int:experiment_id>/', views.get, name='sample_new'),
-    path('get/<int:experiment_id>/<int:project_id>/', views.get, name='sample_get'),
-    path('set/<int:experiment_id>/<int:project_id>/', views.set, name='sample_set'),
-    path('del/<int:experiment_id>/<int:project_id>/', views.delete, name='sample_del'),
+    path('get/<int:experiment_id>/<int:sample_id>/', views.get, name='sample_get'),
+    path('set/<int:experiment_id>/<int:sample_id>/', views.set, name='sample_set'),
+    path('del/<int:experiment_id>/<int:sample_id>/', views.delete, name='sample_del'),
 ]

@@ -9,79 +9,81 @@ import re
 
 class Sample(models.Model):
     experiment_id = models.IntegerField()
-    sample_project = models.CharField(max_length=200)
-    sample_ident = models.CharField(max_length=200, unique=True)
-    sample_name = models.CharField(max_length=200)
-    sample_plate = models.CharField(max_length=200)
-    sample_well = models.CharField(max_length=200)
+    name = models.CharField(max_length=200, default='')
+    project = models.CharField(max_length=200)
+    ident = models.CharField(max_length=200, unique=True)
+    plate = models.CharField(max_length=200, default='')
+    well = models.CharField(max_length=200, default='')
     cell_number = models.IntegerField(default=0)
     read_number = models.IntegerField(default=0)
-    smart_id = models.IntegerField(default=0)
+    smart_name = models.CharField(max_length=200, default='')
     alfa_subsample_ident = models.CharField(max_length=200, default='')  # sample_ID = sample_ident + alfa_subsample_ident
-    alfa_index_id = models.IntegerField(default=0)
+    alfa_index_name = models.CharField(max_length=200, default='')
     beta_subsample_ident = models.CharField(max_length=200, default='')  # sample_ID = sample_ident + beta_subsample_ident
-    beta_index_id = models.IntegerField(default=0)
-    comments = models.TextField(blank=True)
+    beta_index_name = models.CharField(max_length=200, default='')
+    comments = models.TextField(default='')
     date = models.DateField(auto_now_add=True)
     owner = models.CharField(max_length=200, default='Unknown')
 
     def type(self):
-        if self.alfa_index_id == 0 and self.beta_index_id == 0:
+        if self.alfa_index_name == '' and self.beta_index_name == '':
             return 'ab'
-        elif self.alfa_index_id == 0:
+        elif self.alfa_indexname == '':
             return 'a'
         else:
             return 'b'
 
     def get_alfa_ident(self):
-        ident = str(self.sample_ident) + '_' + str(self.alfa_subsample_ident)
+        ident = str(self.ident) + '_' + str(self.alfa_subsample_ident)
         ident = re.sub(r'[ _]+', '_', ident)
         return ident
 
     def get_beta_ident(self):
-        ident = self.sample_ident + '_' + self.beta_subsample_ident
+        ident = str(self.ident) + '_' + str(self.beta_subsample_ident)
         ident = re.sub(r'[ _]+', '_', ident)
         return ident
 
     def get_smart(self):
-        for smart in Smart.objects.filter(id=self.smart_id):
+        for smart in Smart.objects.filter(name=self.smart_name):
             return smart
         return None
 
     def get_smart_seqcore(self):
-        for smart in Smart.objects.filter(id=self.smart_id):
+        for smart in Smart.objects.filter(name=self.smart_name):
             return smart.seqcore
         return ''
 
     def get_alfa_index(self):
-        for index in Index.objects.filter(id=self.alfa_index_id):
+        for index in Index.objects.filter(name=self.alfa_index_name):
             return index
         return None
 
     def get_alfa_index_seqcore(self):
-        for index in Index.objects.filter(id=self.alfa_index_id):
+        for index in Index.objects.filter(name=self.alfa_index_name):
+            print(index.seqcore)
             return index.seqcore
         return ''
 
     def get_beta_index(self):
-        for index in Index.objects.filter(id=self.beta_index_id):
+        for index in Index.objects.filter(name=self.beta_index_name):
             return index
         return None
 
     def get_beta_index_seqcore(self):
-        for index in Index.objects.filter(id=self.beta_index_id):
+        for index in Index.objects.filter(name=self.beta_index_name):
             return index.seqcore
         return ''
 
 
 class UsedBarcode:
     def __init__(self, sample):
-        self.sample_id = sample.id
+        self.sample_ident = sample.ident
         self.owner = sample.owner
-        self.smart_id = sample.smart_id
-        self.alfa_index_id = sample.alfa_index_id
+        self.smart_name = sample.smart_name
+        self.smart_seqcore = sample.get_smart_seqcore()
+        self.alfa_index_name = sample.alfa_index_name
         self.alfa_index_seqcore = sample.get_alfa_index_seqcore()
-        self.beta_index_id = sample.beta_index_id
+        self.beta_index_name = sample.beta_index_name
         self.beta_index_seqcore = sample.get_beta_index_seqcore()
 
 
@@ -93,7 +95,10 @@ class IdContainer:
 
     def append(self, barcode):
         self.barcodes.append(barcode)
-        self.smarts.add(barcode.smart_id)
-        self.seqcores.add(barcode.alfa_index_seqcore)
-        self.seqcores.add(barcode.beta_index_seqcore)
+        if barcode.smart_seqcore:
+            self.smarts.add(barcode.smart_seqcore)
+        if barcode.alfa_index_seqcore:
+            self.indexes.add(barcode.alfa_index_seqcore)
+        if barcode.beta_index_seqcore:
+            self.indexes.add(barcode.beta_index_seqcore)
 

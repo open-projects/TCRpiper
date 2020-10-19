@@ -4,7 +4,7 @@ TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
 
 from django.db import models
 
-from project.models import Project
+from sample.models import Sample
 
 
 EXPERIMENT_STATUS = (('open', 'Open'), ('closed', 'Closed'), ('archived', 'Archived'))
@@ -31,7 +31,7 @@ class Experiment(models.Model):
     # adapter = models.CharField(max_length=200, default='AGATCGGAAGAGCACACGTCTGAACTCCAGTCA')
     # adapter_read2 = models.CharField(max_length=200, default='AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT')
 
-    def num_of_projects(self):
-        project_list = Project.objects.filter(run_id=self.id)
-        return len(project_list)
+    def num_of_samples(self):
+        sample_list = Sample.objects.filter(experiment_id=self.id)
+        return len(sample_list)
 

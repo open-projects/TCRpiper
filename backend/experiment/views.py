@@ -8,7 +8,7 @@ from django.http import Http404
 from django.urls import reverse
 
 from .models import Experiment
-from project.models import Project
+from sample.models import Sample
 
 
 def stock(request):
@@ -38,12 +38,12 @@ def get(request, experiment_id):
     except Exception:
         raise Http404("Experiment does not exist")
 
-    project_list = Project.objects.filter(run_id=experiment.id)
+    sample_list = Sample.objects.filter(experiment_id=experiment.id)
     context = {
         'experiment_id': experiment_id,
         'experiment_status': experiment.status,
-        'project_list': project_list,
-        'num_of_projects': len(project_list)
+        'sample_list': sample_list,
+        'num_of_samples': len(sample_list)
     }
 
     return render(request, 'experiment.html', context)
@@ -55,8 +55,8 @@ def delete(request, experiment_id):
     except Exception:
         raise Http404("Experiment does not exist")
 
-    for project in Project.objects.filter(run_id=experiment_id):
-        project.delete()
+    for sample in Sample.objects.filter(experiment_id=experiment_id):
+        sample.delete()
 
     experiment.delete()
 

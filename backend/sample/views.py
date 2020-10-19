@@ -25,10 +25,10 @@ def delete(request, experiment_id, sample_id):
     try:
         sample = Sample.objects.get(id=sample_id)
     except Sample.DoesNotExist:
-        raise Http404("Project does not exist")
+        raise Http404("Sample does not exist")
     sample.delete()
 
-    return HttpResponseRedirect(reverse(':experiment_get', args=(experiment.id,)))
+    return HttpResponseRedirect(reverse('experiment:experiment_get', args=(experiment.id,)))
 
 
 def get(request, experiment_id, sample_id=0):
@@ -47,26 +47,28 @@ def get(request, experiment_id, sample_id=0):
     }
 
     used_barcodes = IdContainer()
-    for sample in Sample.objects.filter(id=sample_id):
+    for sample in Sample.objects.filter(experiment_id=experiment_id):
         if sample.id == sample_id:
             context = {  # for project modification
                 'experiment_id': sample.experiment_id,
-                'sample_project': sample.sample_project,
-                'sample_ident': sample.sample_ident,
-                'sample_name': sample.sample_name,
-                'sample_palate': sample.sample_palate,
-                'sample_well': sample.sample_well,
+                'sample_id': sample.id,
+                'sample_project': sample.project,
+                'sample_ident': sample.ident,
+                'sample_name': sample.name,
+                'sample_plate': sample.plate,
+                'sample_well': sample.well,
                 'cell_number': sample.cell_number,
                 'read_number': sample.read_number,
-                'smart_id':  sample.smart_id,
-                'alfa_subsample_id': sample.alfa_subsample_id,
-                'alfa_index_id': sample.alfa_index_id,
-                'beta_subsample_id': sample.beta_subsample_id,
-                'beta_index_id': sample.beta_index_id,
+                'smart_name':  sample.smart_name,
+                'alfa_subsample_ident': sample.alfa_subsample_ident,
+                'alfa_index_name': sample.alfa_index_name,
+                'beta_subsample_ident': sample.beta_subsample_ident,
+                'beta_index_name': sample.beta_index_name,
                 'comments': sample.comments,
                 'index_list': index_list,
                 'smart_list': smart_list,
             }
+
         barcode = UsedBarcode(sample)
         used_barcodes.append(barcode)
 
@@ -85,44 +87,48 @@ def set(request, experiment_id, sample_id=0):
         try:
             sample = Sample.objects.get(id=sample_id)
         except sample.DoesNotExist:
-            raise Http404("Project does not exist")
+            raise Http404("Sample does not exist")
 
         try:
             sample.experiment_id = experiment.id
-            sample.project_name = request.POST['project_name']
-            sample.sample_id = request.POST['sample_id']
-            sample.sample_name = request.POST['sample_name']
+            sample.project = request.POST['sample_project']
+            sample.ident = request.POST['sample_ident']
+            sample.name = request.POST['sample_name']
+            sample.plate = request.POST['sample_plate']
+            sample.well = request.POST['sample_well']
             sample.cell_number = request.POST['cell_number']
             sample.read_number = request.POST['read_number']
-            sample.smart_id = request.POST['smart_id']
-            sample.alfa_subsample_id = request.POST['alfa_subsample_id']
-            sample.alfa_index_id = request.POST['alfa_index_id']
-            sample.beta_subsample_id = request.POST['beta_subsample_id']
-            sample.beta_index_id = request.POST['beta_index_id']
+            sample.smart_name = request.POST['smart_name']
+            sample.alfa_subsample_ident = request.POST['alfa_subsample_ident']
+            sample.alfa_index_name = request.POST['alfa_index_name']
+            sample.beta_subsample_ident = request.POST['beta_subsample_ident']
+            sample.beta_index_name = request.POST['beta_index_name']
             sample.comments = request.POST['comments']
             sample.save()
         except Exception as e:
-            raise Http404("Bad request for Project")
+            raise Http404("Bad request for Sample")
 
     else:
         #  project creation
         try:
             sample = Sample(experiment_id=experiment.id,
-                              project_name=request.POST['project_name'],
-                              sample_id=request.POST['sample_id'],
-                              sample_name=request.POST['sample_name'],
-                              cell_number=request.POST['cell_number'],
-                              read_number=request.POST['read_number'],
-                              smart_id=request.POST['smart_id'],
-                              alfa_subsample_id=request.POST['alfa_subsample_id'],
-                              alfa_index_id=request.POST['alfa_subsample_id'],
-                              beta_subsample_id=request.POST['beta_subsample_id'],
-                              beta_index_id=request.POST['beta_index_id'],
-                              comments=request.POST['comments']
+                              project=request.POST['sample_project'],
+                              ident=request.POST['sample_ident'],
+                              name=request.POST['sample_name'],
+                              plate=request.POST['sample_plate'],
+                              well=request.POST['sample_well'],
+                              cell_number=request.POST['cell_number'] if request.POST['cell_number'] else 0,
+                              read_number=request.POST['read_number'] if request.POST['read_number'] else 0,
+                              smart_name=request.POST['smart_name'],
+                              alfa_subsample_ident=request.POST['alfa_subsample_ident'],
+                              alfa_index_name=request.POST['alfa_index_name'],
+                              beta_subsample_ident=request.POST['beta_subsample_ident'],
+                              beta_index_name=request.POST['beta_index_name'],
+                              comments='comments'
                              )
             sample.save()
         except Exception:
-            raise Http404("Bad request for New Project")
+            raise Http404("Bad request for New Sample")
 
     return HttpResponseRedirect(reverse('experiment:experiment_get', args=(experiment.id,)))
 
