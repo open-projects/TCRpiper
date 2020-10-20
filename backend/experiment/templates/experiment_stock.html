@@ -80,12 +80,12 @@ TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
             <table class="table table-hover">
               <thead>
                 <tr>
-                  <th scope="col">Experiment ID</th>
+                  <!-- <th scope="col">Experiment ID</th> -->
                   <th scope="col">Name</th>
-                  <th scope="col">Projects</th>
-                  <th scope="col">Created</th>
+                  <th scope="col">Samples</th>
+                  <th scope="col" style="min-width:8em;">Created</th>
                   <th scope="col">Status</th>
-                  <th scope="col">Configuration</th>
+                  <th scope="col" style="width:18em;">Configuration</th>
                 </tr>
               </thead>
               <tbody>
@@ -101,7 +101,7 @@ TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
                 onclick="location.href='{% url 'experiment:experiment_get' experiment.id %}'"
                 style="cursor: pointer;" name="{{ experiment.id }}" id="experimentID{{ experiment.id }}"
                 >
-                  <th scope="row">{{ experiment.id }}</th>
+                  <!-- <th scope="row">{{ experiment.id }}</th> -->
                   <td>{{ experiment.name }}</td>
                   <td>{{ experiment.num_of_samples }}</td>
                   <td>{{ experiment.date }}</td>
@@ -110,7 +110,8 @@ TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
                     {% if experiment.status == 'open' %}
                       <span class="text-danger">Not ready</span>
                     {% elif experiment.status == 'closed' %}
-                      <a href="#">Download</a>
+                      <span class="" style="padding-right:20px"><a href="#">Sample Sheet</a></span>
+                      <span class="" style="padding-right:20px"><a href="#">Sample Info</a></span>
                     {% else %}
                       Out-of-date
                     {% endif %}
@@ -123,15 +124,7 @@ TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
           <div class="card-footer">
             <button type="button" class="btn invisible">Placeholder</button>
             <span class="float-right">
-              <form action="{% url 'experiment:experiment_new' %}" method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-                <div class="input-group mb-3">
-                  <input type="text" class="form-control" name="experiment_name" placeholder="Experiment name" aria-label="Experiment name">
-                  <div class="input-group-append">
-                    <button type="submit" class="btn btn-outline btn-success">Create experiment</button>
-                  </div>
-                </div>
-              </form>
+              <a type="button" class="btn btn-outline btn-success" href="{% url 'experiment:experiment_new' %}">Create experiment</a>
             </span>
           </div>
         </div>

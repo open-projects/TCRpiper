@@ -8,26 +8,31 @@ from sample.models import Sample
 
 
 EXPERIMENT_STATUS = (('open', 'Open'), ('closed', 'Closed'), ('archived', 'Archived'))
-WORKFLOW_TYPE = (('GenerateFASTQ', 'GenerateFASTQ'), ('other', 'Other'))
+WORKFLOW_TYPE = (('GenerateFASTQ', 'Generate FASTQ'), ('other', 'Other'))
 APPLICATION_TYPE = (('FASTQ Only', 'FASTQ Only'), ('other', 'Other'))
 ASSAY_TYPE = (('TruSeq HT', 'TruSeq HT'), ('other', 'Other'))
+CHEMISTRY = (('Amplicon', 'Amplicon'), ('other', 'Other'))
+REVCOMPL = (('0', 'No'), ('1', 'Yes'))
+DEFAULT_READS = 166
+FILE_VERSION = 4
 
 
 class Experiment(models.Model):
     status = models.CharField(max_length=200, choices=EXPERIMENT_STATUS, default='open')
     # [Header]
-    iem_file_version = models.CharField(max_length=200, default='4')
+    iem_file_version = models.CharField(max_length=200, default=FILE_VERSION)
     name = models.CharField(max_length=200)
     date = models.DateField(auto_now_add=True)
     workflow = models.CharField(max_length=200, choices=WORKFLOW_TYPE, default='GenerateFASTQ')
     application = models.CharField(max_length=200, choices=APPLICATION_TYPE, default='FASTQ Only')
     assay = models.CharField(max_length=200, choices=ASSAY_TYPE, default='TruSeq HT')
+    chemistry = models.CharField(max_length=200, choices=CHEMISTRY, default='Amplicon')
     description = models.TextField(default='')
     # [Reads]
-    reads_1 = models.IntegerField(default=166)
-    reads_2 = models.IntegerField(default=166)
+    reads_1 = models.IntegerField(default=DEFAULT_READS)
+    reads_2 = models.IntegerField(default=DEFAULT_READS)
     # [Settings]
-    rev_compl = models.IntegerField(default=0)
+    rev_compl = models.IntegerField(choices=REVCOMPL, default=0)
     # adapter = models.CharField(max_length=200, default='AGATCGGAAGAGCACACGTCTGAACTCCAGTCA')
     # adapter_read2 = models.CharField(max_length=200, default='AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT')
 

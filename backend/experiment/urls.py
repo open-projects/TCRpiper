@@ -9,7 +9,8 @@ from . import views
 app_name = 'experiment'
 urlpatterns = [
     path('', views.stock, name='experiment_stock'),
-    path('new/', views.new, name='experiment_new'),
+    path('get/', views.get, name='experiment_new'),
+    path('set/<int:experiment_id>/', views.set, name='experiment_set'),
     path('get/<int:experiment_id>/', views.get, name='experiment_get'),
     path('del/<int:experiment_id>/', views.delete, name='experiment_del'),
     path('arch/<int:experiment_id>/', views.archive, name='experiment_arch'),
