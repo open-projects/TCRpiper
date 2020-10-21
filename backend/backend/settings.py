@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'primers.apps.PrimersConfig',
     'sample.apps.SampleConfig',
     'experiment.apps.ExperimentConfig',
+    'configurator.apps.ConfiguratorConfig',
 ]
 
 MIDDLEWARE = [

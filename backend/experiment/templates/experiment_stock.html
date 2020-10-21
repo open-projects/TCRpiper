@@ -110,8 +110,8 @@ TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
                     {% if experiment.status == 'open' %}
                       <span class="text-danger">Not ready</span>
                     {% elif experiment.status == 'closed' %}
-                      <span class="" style="padding-right:20px"><a href="#">Sample Sheet</a></span>
-                      <span class="" style="padding-right:20px"><a href="#">Sample Info</a></span>
+                      <span class="" style="padding-right:20px"><a href="{% url 'configurator:get_samplesheet' experiment.id %}">Sample Sheet</a></span>
+                      <span class="" style="padding-right:20px"><a href="{% url 'configurator:get_sampleinfo' experiment.id %}">Sample Info</a></span>
                     {% else %}
                       Out-of-date
                     {% endif %}
@@ -130,7 +130,6 @@ TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
         </div>
       </div>
     </div>
-
   </div>
   <!-- /.container -->
 

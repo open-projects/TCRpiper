@@ -7,6 +7,9 @@ from primers.models import Smart, Index
 import re
 
 
+COMPLEMENT = {'A': 'T', 'C': 'G', 'G': 'C', 'T': 'A'}
+
+
 class Sample(models.Model):
     experiment_id = models.IntegerField()
     name = models.CharField(max_length=200, default='')
@@ -60,8 +63,10 @@ class Sample(models.Model):
 
     def get_alfa_index_seqcore(self):
         for index in Index.objects.filter(name=self.alfa_index_name):
-            print(index.seqcore)
-            return index.seqcore
+            seqcore = index.seqcore
+            if len(seqcore) > 0:
+                seqcore = "".join(COMPLEMENT.get(base, base) for base in reversed(seqcore))
+                return seqcore
         return ''
 
     def get_beta_index(self):
@@ -71,7 +76,10 @@ class Sample(models.Model):
 
     def get_beta_index_seqcore(self):
         for index in Index.objects.filter(name=self.beta_index_name):
-            return index.seqcore
+            seqcore = index.seqcore
+            if len(seqcore) > 0:
+                seqcore = "".join(COMPLEMENT.get(base, base) for base in reversed(seqcore))
+                return seqcore
         return ''
 
 
