@@ -29,8 +29,8 @@ class Experiment(models.Model):
     chemistry = models.CharField(max_length=200, choices=CHEMISTRY, default='Amplicon')
     description = models.TextField(default='')
     # [Reads]
-    reads_1 = models.IntegerField(default=DEFAULT_READS)
-    reads_2 = models.IntegerField(default=DEFAULT_READS)
+    reads_1 = models.IntegerField(default=0)
+    reads_2 = models.IntegerField(default=0)
     # [Settings]
     rev_compl = models.IntegerField(choices=REVCOMPL, default=0)
     # adapter = models.CharField(max_length=200, default='AGATCGGAAGAGCACACGTCTGAACTCCAGTCA')
@@ -39,4 +39,9 @@ class Experiment(models.Model):
     def num_of_samples(self):
         sample_list = Sample.objects.filter(experiment_id=self.id)
         return len(sample_list)
+
+    def is_pared(self):
+        if self.reads_1 and self.reads_2:
+            return True
+        return False
 

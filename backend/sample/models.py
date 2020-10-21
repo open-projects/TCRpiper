@@ -46,6 +46,16 @@ class Sample(models.Model):
         ident = re.sub(r'[ _]+', '_', ident)
         return ident
 
+    def get_alfa_name(self):
+        ident = str(self.ident) + '_' + str(self.alfa_subsample_ident)
+        ident = re.sub(r'[ _]+', '_', ident)
+        return ident
+
+    def get_beta_name(self):
+        ident = str(self.ident) + '_' + str(self.beta_subsample_ident)
+        ident = re.sub(r'[ _]+', '_', ident)
+        return ident
+
     def get_smart(self):
         for smart in Smart.objects.filter(name=self.smart_name):
             return smart
@@ -81,6 +91,13 @@ class Sample(models.Model):
                 seqcore = "".join(COMPLEMENT.get(base, base) for base in reversed(seqcore))
                 return seqcore
         return ''
+
+    def get_chain(self):
+        if self.alfa_index_name != '' and self.beta_index_name == '':
+            return 'TRA'
+        if self.alfa_index_name == '' and self.beta_index_name != '':
+            return 'TRB'
+        return 'TRX'
 
 
 class UsedBarcode:
