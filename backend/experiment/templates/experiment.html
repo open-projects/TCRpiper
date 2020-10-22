@@ -93,7 +93,7 @@ TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
                       <div class="row">
                         <div class="col-md-10 mb-3">
                           <label for="experiment_name">Experiment name</label>
-                          <input type="text" class="form-control" name="experiment_name" id="experiment_name" placeholder="Name" value="{{ experiment_name }}" required="">
+                          <input type="text" class="form-control" name="experiment_name" id="experiment_name" placeholder="Name ( allowed symbols: [A-Z_0-9+-] )" value="{{ experiment_name }}" required="">
                           <div class="invalid-feedback">
                             Valid Experiment name is required.
                           </div>
@@ -209,50 +209,54 @@ TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
                 </div>
               </div>
               <!-- List of Samples -->
-              <div class="row">
-                <div class="col-md-12 mb-5">
-                  <div class="card h-100">
-                    <div class="card-header">List of samples</div>
-                    <div class="card-body scroll">
-                      <table class="table table-hover">
-                        <thead>
-                          <tr>
-                            <th scope="col">Sample ID</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Owner</th>
-                            <th scope="col">Created</th>
-                            <th scope="col">Comments</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {% for sample in sample_list %}
-                            <tr onclick="location.href='{% url 'sample:sample_get' experiment_id sample.id %}'" style="cursor:pointer;">
-                              <td scope="row">{{ sample.ident }}</td>
-                              <td>{{ sample.name }}</td>
-                              <td>{{ sample.owner }}</td>
-                              <td>{{ sample.date }}</td>
-                              <td>{{ sample.comments }}</td>
+              {% if experiment_id %}
+                <div class="row">
+                  <div class="col-md-12 mb-5">
+                    <div class="card h-100">
+                      <div class="card-header">List of samples</div>
+                      <div class="card-body scroll">
+                        <table class="table table-hover">
+                          <thead>
+                            <tr>
+                              <th scope="col">Sample ID</th>
+                              <th scope="col">Name</th>
+                              <th scope="col">Owner</th>
+                              <th scope="col">Created</th>
+                              <th scope="col">Comments</th>
                             </tr>
-                          {% endfor %}
-                        </tbody>
-                      </table>
+                          </thead>
+                          <tbody>
+                            {% for sample in sample_list %}
+                              <tr onclick="location.href='{% url 'sample:sample_get' experiment_id sample.id %}'" style="cursor:pointer;">
+                                <td scope="row">{{ sample.ident }}</td>
+                                <td>{{ sample.name }}</td>
+                                <td>{{ sample.owner }}</td>
+                                <td>{{ sample.date }}</td>
+                                <td>{{ sample.comments }}</td>
+                              </tr>
+                            {% endfor %}
+                          </tbody>
+                        </table>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              {% endif %}
             </div>
             <div class="card-footer">
-              {% if experiment_status == 'archived' %}
+              {% if experiment_id and experiment_status == 'archived' %}
                 <a type="button" class="btn btn-danger" href="{% url 'experiment:experiment_del' experiment_id %}">Delete</a>
-              {% elif experiment_status != 'archived' %}
+              {% elif experiment_id and experiment_status != 'archived' %}
                 <a type="button" class="btn btn-secondary" href="{% url 'experiment:experiment_arch' experiment_id %}">Archive</a>
-                {% if experiment_status != 'closed' %}
+                {% if experiment_id and experiment_status != 'closed' %}
                   <a type="button" class="btn btn-primary" href="{% url 'experiment:experiment_sub' experiment_id %}">Submit</a>
                 {% endif %}
               {% endif %}
               {% if experiment_status != 'archived' and experiment_status != 'closed' %}
                 <span class="float-right">
-                  <a type="button" class="btn btn-default" href="{% url 'sample:sample_new' experiment_id %}">Add sample</a>
+                  {% if experiment_id %}
+                    <a type="button" class="btn btn-default" href="{% url 'sample:sample_new' experiment_id %}">Add sample</a>
+                  {% endif %}
                   <button type="submit" class="btn btn-success">Save</button>
                 </span>
               {% endif %}

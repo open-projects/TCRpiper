@@ -50,9 +50,15 @@ footer .container p {
     padding: 20px;
 }
 
-.myDropDown
-{
+.myDropDown {
    height: 400px;
    overflow: auto;
 }
 
+.required {
+    color: red;
+}
+
+.attention {
+    color: blue;
+}

@@ -2,6 +2,7 @@
 TCRpiper - a pipeline for TCR sequence treatment. Copyright (C) 2020  D. Malko
 '''
 
+import re
 from django.shortcuts import render
 from django.urls import reverse
 
@@ -37,12 +38,16 @@ def get(request, experiment_id, sample_id=0):
     except Exception:
         raise Http404("Experiment does not exist")
 
-    index_list = Index.objects.order_by('id')
+    alfa_index_list = Index.objects.filter(type='alfa').order_by('id')
+    beta_index_list = Index.objects.filter(type='beta').order_by('id')
     smart_list = Smart.objects.order_by('id')
     context = {  # for project creation
         'experiment_id': experiment.id,
         'sample_id': 0,
-        'index_list': index_list,
+        'alfa_subsample_ident': 'alfa',
+        'beta_subsample_ident': 'beta',
+        'alfa_index_list': alfa_index_list,
+        'beta_index_list': beta_index_list,
         'smart_list': smart_list,
     }
 
@@ -65,7 +70,8 @@ def get(request, experiment_id, sample_id=0):
                 'beta_subsample_ident': sample.beta_subsample_ident,
                 'beta_index_name': sample.beta_index_name,
                 'comments': sample.comments,
-                'index_list': index_list,
+                'alfa_index_list': alfa_index_list,
+                'beta_index_list': beta_index_list,
                 'smart_list': smart_list,
             }
 
@@ -91,8 +97,8 @@ def set(request, experiment_id, sample_id=0):
 
         try:
             sample.experiment_id = experiment.id
-            sample.project = request.POST['sample_project']
-            sample.ident = request.POST['sample_ident']
+            sample.project = re.sub(r'[ _]+', '_', request.POST['sample_project'])
+            sample.ident = re.sub(r'[ _]+', '_', request.POST['sample_ident'])
             sample.name = request.POST['sample_name']
             sample.plate = request.POST['sample_plate']
             sample.well = request.POST['sample_well']
@@ -112,8 +118,8 @@ def set(request, experiment_id, sample_id=0):
         #  project creation
         try:
             sample = Sample(experiment_id=experiment.id,
-                              project=request.POST['sample_project'],
-                              ident=request.POST['sample_ident'],
+                              project=re.sub(r'[ _]+', '_', request.POST['sample_project']),
+                              ident=re.sub(r'[ _]+', '_', request.POST['sample_ident']),
                               name=request.POST['sample_name'],
                               plate=request.POST['sample_plate'],
                               well=request.POST['sample_well'],

@@ -54,7 +54,7 @@ def sampleinfo(request, experiment_id=0):
             baseline = ''
             subject_id = ''
             antigen = ''
-            reads_exp = sample.cell_number
+            reads_exp = sample.read_number
 
             sample_stings.append('\t'.join((alfa_name, chain, barcodes, r1, r2, baseline, subject_id, antigen, str(reads_exp))))
             n += 1
@@ -70,7 +70,7 @@ def sampleinfo(request, experiment_id=0):
             baseline = ''
             subject_id = ''
             antigen = ''
-            reads_exp = sample.cell_number
+            reads_exp = sample.read_number
 
             sample_stings.append('\t'.join((beta_name, chain, barcodes, r1, r2, baseline, subject_id, antigen, str(reads_exp))))
             n += 1

@@ -2,6 +2,7 @@
 TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
 '''
 
+import re
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.http import Http404
@@ -30,7 +31,7 @@ def set(request, experiment_id=0):
 
         experiment.status = request.POST['experiment_status']
         experiment.iem_file_version = request.POST['iem_file_version']
-        experiment.name = str(request.POST['experiment_name'])
+        experiment.name = re.sub(r'[ _]+', '_', request.POST['experiment_name'])
         experiment.workflow = request.POST['workflow']
         experiment.application = request.POST['application']
         experiment.assay = request.POST['assay']
@@ -46,7 +47,7 @@ def set(request, experiment_id=0):
         try:
             experiment = Experiment(status=request.POST['experiment_status'],
                                     iem_file_version=request.POST['iem_file_version'],
-                                    name=request.POST['experiment_name'],
+                                    name=re.sub(r'[ _]+', '_', request.POST['experiment_name']),
                                     workflow=request.POST['workflow'],
                                     application=request.POST['application'],
                                     assay=request.POST['assay'],
