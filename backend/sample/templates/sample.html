@@ -200,10 +200,10 @@ TCRpiper - a pipeline for TCR sequence treatment. Copyright (C) 2020  D. Malko
                                       {% for index in alfa_index_list %}
                                         <tr class="dropdown-item" name="{{ index.name }}" id="alfaindexCheck{{ index.id }}">
                                           {% if index.seqcore in used_barcodes.indexes %}
-                                            <th scope="row" class="alfaindexid used_barcode">{{index.name}}</th>
+                                            <th scope="row" class="alfaindexid used_barcode">{{ index.name }}</th>
                                             <td class="alfaindexseq used_barcode">{{ index.seqcore }}</td>
                                           {% else %}
-                                            <th scope="row" class="alfaindexid">{{index.name}}</th>
+                                            <th scope="row" class="alfaindexid">{{ index.name }}</th>
                                             <td class="alfaindexseq">{{ index.seqcore }}</td>
                                           {% endif %}
                                         </tr>
@@ -286,10 +286,12 @@ TCRpiper - a pipeline for TCR sequence treatment. Copyright (C) 2020  D. Malko
                         </thead>
                         <tbody>
                           {% for bcode in used_barcodes.barcodes %}
-                            <th scope="row" class="sampleident">{{ bcode.sample_ident }}</th>
-                            <td><span class="smartid">{{ bcode.smart_name }}</span></td>
-                            <td><span class="alfaindexid">{% if bcode.alfa_index_name %}{{ bcode.alfa_index_name }}{% else %} --- {% endif %}</span></td>
-                            <td><span class="betaindexid">{% if bcode.beta_index_name %}{{ bcode.beta_index_name }}{% else %} --- {% endif %}</span></td>
+                            <tr>
+                              <th scope="row" class="sampleident">{{ bcode.sample_ident }}</th>
+                              <td><span class="smartid">{{ bcode.smart_name }}</span></td>
+                              <td><span class="alfaindexid">{% if bcode.alfa_index_name %}{{ bcode.alfa_index_name }}{% else %} --- {% endif %}</span></td>
+                              <td><span class="betaindexid">{% if bcode.beta_index_name %}{{ bcode.beta_index_name }}{% else %} --- {% endif %}</span></td>
+                            </tr>
                           {% endfor %}
                         </tbody>
                       </table>
