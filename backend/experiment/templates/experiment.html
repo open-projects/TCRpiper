@@ -245,17 +245,17 @@ TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
             </div>
             <div class="card-footer">
               {% if experiment_id and experiment_status == 'archived' %}
-                <a type="button" class="btn btn-danger" href="{% url 'experiment:experiment_del' experiment_id %}">Delete</a>
+                <a class="btn btn-danger" href="{% url 'experiment:experiment_del' experiment_id %}">Delete</a>
               {% elif experiment_id and experiment_status != 'archived' %}
-                <a type="button" class="btn btn-secondary" href="{% url 'experiment:experiment_arch' experiment_id %}">Archive</a>
+                <a class="btn btn-secondary" href="{% url 'experiment:experiment_arch' experiment_id %}">Archive</a>
                 {% if experiment_id and experiment_status != 'closed' %}
-                  <a type="button" class="btn btn-primary" href="{% url 'experiment:experiment_sub' experiment_id %}">Submit</a>
+                  <a class="btn btn-primary" href="{% url 'experiment:experiment_sub' experiment_id %}">Submit</a>
                 {% endif %}
               {% endif %}
               {% if experiment_status != 'archived' and experiment_status != 'closed' %}
                 <span class="float-right">
                   {% if experiment_id %}
-                    <a type="button" class="btn btn-default" href="{% url 'sample:sample_new' experiment_id %}">Add sample</a>
+                    <a class="btn btn-default" href="{% url 'sample:sample_new' experiment_id %}">Add sample</a>
                   {% endif %}
                   <button type="submit" class="btn btn-success">Save</button>
                 </span>
