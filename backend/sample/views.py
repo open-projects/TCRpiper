@@ -76,7 +76,6 @@ def get(request, experiment_id, sample_id=0):
                 'smart_list': smart_list,
                 'experiment_status': experiment.status,
             }
-        print(experiment.status)
         barcode = UsedBarcode(sample)
         used_barcodes.append(barcode)
 

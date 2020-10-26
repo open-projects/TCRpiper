@@ -198,7 +198,7 @@ TCRpiper - a pipeline for TCR sequence treatment. Copyright (C) 2020  D. Malko
                                   <table class="table table-borderless table-sm">
                                     <tbody>
                                       {% for index in alfa_index_list %}
-                                        <tr class="dropdown-item" name="{{ index.name }}" id="alfaindexCheck{{ index.id }}">
+                                        <tr class="dropdown-item" name="{{ index.name }}" data-dropdown="{{ index.seqcore }}" id="alfaIndex{{ index.id }}">
                                           {% if index.seqcore in used_barcodes.indexes %}
                                             <th scope="row" class="alfaindexid used_barcode">{{ index.name }}</th>
                                             <td class="alfaindexseq used_barcode">{{ index.seqcore }}</td>
@@ -213,7 +213,7 @@ TCRpiper - a pipeline for TCR sequence treatment. Copyright (C) 2020  D. Malko
                                 </div>
                               </div>
                             </label>
-                            <input type="text" class="form-control" name="alfa_index_name" id="alfa_index_name" placeholder="index name" value="{{ alfa_index_name }}">
+                            <input type="text" class="form-control alfa_beta_index" name="alfa_index_name" data-dropdown="" id="alfa_index_name" placeholder="index name" value="{{ alfa_index_name }}">
                             <div class="invalid-feedback">
                               Please enter a valid index.
                             </div>
@@ -244,23 +244,23 @@ TCRpiper - a pipeline for TCR sequence treatment. Copyright (C) 2020  D. Malko
                                   <!-- drop down -->
                                   <table class="table table-borderless table-sm">
                                     <tbody>
-                                    {% for index in beta_index_list %}
-                                      <tr class="dropdown-item" name="{{ index.name }}" id="betaindexCheck{{ index.id }}">
-                                        {% if index.seqcore in used_barcodes.indexes %}
-                                          <th scope="row" class="betaindexid used_barcode">{{ index.name }}</th>
-                                          <td class="betaindexseq used_barcode">{{ index.seqcore }}</td>
-                                        {% else %}
-                                          <th scope="row" class="betaindexid">{{ index.name }}</th>
-                                          <td class="betaindexseq">{{ index.seqcore }}</td>
-                                        {% endif %}
-                                      </tr>
-                                    {% endfor %}
+                                      {% for index in beta_index_list %}
+                                        <tr class="dropdown-item" name="{{ index.name }}" data-dropdown="{{ index.seqcore }}" id="betaIndex{{ index.id }}">
+                                          {% if index.seqcore in used_barcodes.indexes %}
+                                            <th scope="row" class="betaindexid used_barcode">{{ index.name }}</th>
+                                            <td class="betaindexseq used_barcode">{{ index.seqcore }}</td>
+                                          {% else %}
+                                            <th scope="row" class="betaindexid">{{ index.name }}</th>
+                                            <td class="betaindexseq">{{ index.seqcore }}</td>
+                                          {% endif %}
+                                        </tr>
+                                      {% endfor %}
                                     </tbody>
                                   </table>
                                 </div>
                               </div>
                             </label>
-                            <input type="text" class="form-control" name="beta_index_name" id="beta_index_name" placeholder="index name" value="{{ beta_index_name }}">
+                            <input type="text" class="form-control alfa_beta_index" name="beta_index_name" data-dropdown="" id="beta_index_name" placeholder="index name" value="{{ beta_index_name }}">
                             <div class="invalid-feedback">
                               Please enter a valid index.
                             </div>
@@ -341,8 +341,8 @@ TCRpiper - a pipeline for TCR sequence treatment. Copyright (C) 2020  D. Malko
   <!-- Bootstrap core JavaScript -->
   <script src="{% static "vendor/jquery/jquery.min.js" %}"></script>
   <script src="{% static "vendor/bootstrap/js/bootstrap.bundle.min.js" %}"></script>
-  <script src="{% static "js/main.js" %}"></script>
   <script src="{% static "js/sample.js" %}"></script>
+  <script src="{% static "js/main.js" %}"></script>
 
 </body>
 

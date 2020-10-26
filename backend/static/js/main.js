@@ -16,10 +16,15 @@ $(".custom-file-input").on("change", function() {
     $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
 });
 
+// dropdown inputs
 $(".dropdown-item").click(function (e) {
     $this = this;
-    var number = $(this).attr('name');
+    var name = $(this).attr('name');
+    var data = $(this).attr('data-dropdown'); //  custom attribute
     var dropdown_with_input = $(this).closest('.dropdown-with-input');
-    dropdown_with_input.find('input').val(number);
+    var input = dropdown_with_input.find('input');
+    input.val(name)
+    input.attr('data-dropdown', data); //  custom attribute
+    input.trigger("change");
 });
 

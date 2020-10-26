@@ -134,7 +134,7 @@ TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
                         <div class="col-md-4 mb-3">
                           <div class="form-group">
                             <label for="application">Application</label>
-                            <select class="form-control" name="application" id="application">
+                            <select class="form-control my-form-control" name="application" id="application">
                               {% for app in application_list %}
                                 {% if app.0 == application %}
                                   <option selected value="{{ app.0 }}">{{ app.1 }}</option>
