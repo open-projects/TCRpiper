@@ -49,6 +49,7 @@ def get(request, experiment_id, sample_id=0):
         'alfa_index_list': alfa_index_list,
         'beta_index_list': beta_index_list,
         'smart_list': smart_list,
+        'experiment_status': experiment.status,
     }
 
     used_barcodes = IdContainer()
@@ -73,8 +74,9 @@ def get(request, experiment_id, sample_id=0):
                 'alfa_index_list': alfa_index_list,
                 'beta_index_list': beta_index_list,
                 'smart_list': smart_list,
+                'experiment_status': experiment.status,
             }
-
+        print(experiment.status)
         barcode = UsedBarcode(sample)
         used_barcodes.append(barcode)
 
