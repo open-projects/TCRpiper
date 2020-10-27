@@ -16,7 +16,8 @@ def samplesheet(request, experiment_id=0):
         try:
             experiment = Experiment.objects.get(id=experiment_id)
         except Exception:
-            raise Http404("Experiment does not exist")
+            #raise Http404("Experiment does not exist")
+            return HttpResponseRedirect(reverse('experiment:experiment_stock'))
 
     sample_list = Sample.objects.filter(experiment_id=experiment_id).order_by('id')  # ordering is important !
     context = {
@@ -36,7 +37,8 @@ def sampleinfo(request, experiment_id=0):
         try:
             experiment = Experiment.objects.get(id=experiment_id)
         except Exception:
-            raise Http404("Experiment does not exist")
+            #raise Http404("Experiment does not exist")
+            return HttpResponseRedirect(reverse('experiment:experiment_stock'))
 
     paired = experiment.is_pared()
 

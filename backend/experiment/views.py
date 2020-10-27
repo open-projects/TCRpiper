@@ -27,7 +27,8 @@ def set(request, experiment_id=0):
         try:
             experiment = Experiment.objects.get(id=experiment_id)
         except Exception:
-            raise Http404("Experiment does not exist")
+            #raise Http404("Experiment does not exist")
+            return HttpResponseRedirect(reverse('experiment:experiment_stock'))
 
         experiment.status = request.POST['experiment_status']
         experiment.iem_file_version = request.POST['iem_file_version']
@@ -69,7 +70,8 @@ def get(request, experiment_id=0):
         try:
             experiment = Experiment.objects.get(id=experiment_id)
         except Exception:
-            raise Http404("Experiment does not exist")
+            #raise Http404("Experiment does not exist")
+            return HttpResponseRedirect(reverse('experiment:experiment_stock'))
 
         sample_list = Sample.objects.filter(experiment_id=experiment.id)
         context = {
@@ -126,7 +128,8 @@ def delete(request, experiment_id):
     try:
         experiment = Experiment.objects.get(id=experiment_id)
     except Exception:
-        raise Http404("Experiment does not exist")
+        #raise Http404("Experiment does not exist")
+        return HttpResponseRedirect(reverse('experiment:experiment_stock'))
 
     for sample in Sample.objects.filter(experiment_id=experiment_id):
         sample.delete()
@@ -140,7 +143,9 @@ def archive(request, experiment_id):
     try:
         experiment = Experiment.objects.get(id=experiment_id)
     except Exception:
-        raise Http404("Experiment does not exist")
+        #raise Http404("Experiment does not exist")
+        return HttpResponseRedirect(reverse('experiment:experiment_stock'))
+
     experiment.status = 'archived'
     experiment.save()
 

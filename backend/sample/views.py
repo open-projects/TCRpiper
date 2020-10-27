@@ -21,12 +21,14 @@ def delete(request, experiment_id, sample_id):
     try:
         experiment = Experiment.objects.get(id=experiment_id)
     except Exception:
-        raise Http404("Experiment does not exist")
+        #raise Http404("Experiment does not exist")
+        return HttpResponseRedirect(reverse('experiment:experiment_stock'))
 
     try:
         sample = Sample.objects.get(id=sample_id)
     except Sample.DoesNotExist:
         raise Http404("Sample does not exist")
+
     sample.delete()
 
     return HttpResponseRedirect(reverse('experiment:experiment_get', args=(experiment.id,)))
@@ -36,7 +38,8 @@ def get(request, experiment_id, sample_id=0):
     try:
         experiment = Experiment.objects.get(id=experiment_id)
     except Exception:
-        raise Http404("Experiment does not exist")
+        #raise Http404("Experiment does not exist")
+        return HttpResponseRedirect(reverse('experiment:experiment_stock'))
 
     alfa_index_list = Index.objects.filter(type='alfa').order_by('id')
     beta_index_list = Index.objects.filter(type='beta').order_by('id')
@@ -87,10 +90,11 @@ def set(request, experiment_id, sample_id=0):
     try:
         experiment = Experiment.objects.get(id=experiment_id)
     except Exception:
-        raise Http404("Experiment does not exist")
+        #raise Http404("Experiment does not exist")
+        return HttpResponseRedirect(reverse('experiment:experiment_stock'))
 
     if sample_id:
-        #  project modification
+        #  sample modification
         try:
             sample = Sample.objects.get(id=sample_id)
         except sample.DoesNotExist:
@@ -116,7 +120,7 @@ def set(request, experiment_id, sample_id=0):
             raise Http404("Bad request for Sample")
 
     else:
-        #  project creation
+        #  sample creation
         try:
             sample = Sample(experiment_id=experiment.id,
                               project=re.sub(r'[ _]+', '_', request.POST['sample_project']),
@@ -144,7 +148,8 @@ def save(request, experiment_id):
     try:
         experiment = Experiment.objects.get(id=experiment_id)
     except Exception:
-        raise Http404("Experiment does not exist")
+        #raise Http404("Experiment does not exist")
+        return HttpResponseRedirect(reverse('experiment:experiment_stock'))
 
     return HttpResponseRedirect(reverse('experiment:experiment_get', args=(experiment.id,)))
 
