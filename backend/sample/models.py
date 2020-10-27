@@ -20,10 +20,13 @@ class Sample(models.Model):
     cell_number = models.IntegerField(default=0)
     read_number = models.IntegerField(default=0)
     smart_name = models.CharField(max_length=200, default='')
+    smart_benchling = models.CharField(max_length=200, default='')
     alfa_subsample_ident = models.CharField(max_length=200, default='')  # sample_ID = sample_ident + alfa_subsample_ident
     alfa_index_name = models.CharField(max_length=200, default='')
+    alfa_index_benchling = models.CharField(max_length=200, default='')
     beta_subsample_ident = models.CharField(max_length=200, default='')  # sample_ID = sample_ident + beta_subsample_ident
     beta_index_name = models.CharField(max_length=200, default='')
+    beta_index_benchling = models.CharField(max_length=200, default='')
     comments = models.TextField(default='')
     date = models.DateField(auto_now_add=True)
     owner = models.CharField(max_length=200, default='Unknown')

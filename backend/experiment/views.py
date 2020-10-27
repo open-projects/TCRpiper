@@ -73,7 +73,7 @@ def get(request, experiment_id=0):
             #raise Http404("Experiment does not exist")
             return HttpResponseRedirect(reverse('experiment:experiment_stock'))
 
-        sample_list = Sample.objects.filter(experiment_id=experiment.id)
+        sample_list = Sample.objects.filter(experiment_id=experiment.id).order_by('id').reverse()
         context = {
             'experiment_id': experiment.id,
             'experiment_status': experiment.status,

@@ -56,7 +56,7 @@ def get(request, experiment_id, sample_id=0):
     }
 
     used_barcodes = IdContainer()
-    for sample in Sample.objects.filter(experiment_id=experiment_id):
+    for sample in Sample.objects.filter(experiment_id=experiment_id).order_by('id'):
         if sample.id == sample_id:
             context = {  # for project modification
                 'experiment_id': sample.experiment_id,
@@ -69,10 +69,13 @@ def get(request, experiment_id, sample_id=0):
                 'cell_number': sample.cell_number,
                 'read_number': sample.read_number,
                 'smart_name':  sample.smart_name,
+                'smart_benchling': sample.smart_benchling,
                 'alfa_subsample_ident': sample.alfa_subsample_ident,
                 'alfa_index_name': sample.alfa_index_name,
+                'alfa_index_benchling': sample.alfa_index_benchling,
                 'beta_subsample_ident': sample.beta_subsample_ident,
                 'beta_index_name': sample.beta_index_name,
+                'beta_index_benchling': sample.beta_index_benchling,
                 'comments': sample.comments,
                 'alfa_index_list': alfa_index_list,
                 'beta_index_list': beta_index_list,
@@ -110,10 +113,13 @@ def set(request, experiment_id, sample_id=0):
             sample.cell_number = request.POST['cell_number']
             sample.read_number = request.POST['read_number']
             sample.smart_name = request.POST['smart_name']
+            sample.smart_benchling = request.POST['smart_benchling']
             sample.alfa_subsample_ident = request.POST['alfa_subsample_ident']
             sample.alfa_index_name = request.POST['alfa_index_name']
+            sample.alfa_index_benchling = request.POST['alfa_index_benchling']
             sample.beta_subsample_ident = request.POST['beta_subsample_ident']
             sample.beta_index_name = request.POST['beta_index_name']
+            sample.beta_index_benchling = request.POST['beta_index_benchling']
             sample.comments = request.POST['comments']
             sample.save()
         except Exception as e:
@@ -131,10 +137,13 @@ def set(request, experiment_id, sample_id=0):
                               cell_number=request.POST['cell_number'] if request.POST['cell_number'] else 0,
                               read_number=request.POST['read_number'] if request.POST['read_number'] else 0,
                               smart_name=request.POST['smart_name'],
+                              smart_benchling = request.POST['smart_benchling'],
                               alfa_subsample_ident=request.POST['alfa_subsample_ident'],
                               alfa_index_name=request.POST['alfa_index_name'],
+                              alfa_index_benchling=request.POST['alfa_index_benchling'],
                               beta_subsample_ident=request.POST['beta_subsample_ident'],
                               beta_index_name=request.POST['beta_index_name'],
+                              beta_index_benchling=request.POST['beta_index_benchling'],
                               comments='comments'
                              )
             sample.save()
