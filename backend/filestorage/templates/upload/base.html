@@ -1,4 +1,4 @@
-{% extends 'upload/base.html' %}
+{% extends 'base.html' %}
 
 {% block content %}
   <form method="post" action="{% url 'filestorage:clear_database' %}">
@@ -9,7 +9,7 @@
     </button>
   </form>
   <h1 class="page-header">
-    Photos
+    Files
     <small>/ {% block title %}{% endblock %}</small>
   </h1>
   <div class="row">
