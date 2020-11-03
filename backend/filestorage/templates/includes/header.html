@@ -1,18 +1,13 @@
-<nav class="navbar navbar-default">
+<nav class="navbar navbar-expand-lg navbar-light bg-light mb-3">
   <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-menu" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="{% url 'filestorage:home' %}">Files Library</a>
-    </div>
-    <div class="collapse navbar-collapse" id="main-menu">
-      <ul class="nav navbar-nav">
-        <li{% if '/filestorage/' in request.path %} class="active"{% endif %}>
-          <a href="{% url 'filestorage:basic_upload' %}">Files</a>
+    <a class="navbar-brand" href="{% url 'filestorage:home' %}">Files Library</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarText">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="{% url 'filestorage:progress_bar_upload' %}">Files</a>
         </li>
       </ul>
     </div>

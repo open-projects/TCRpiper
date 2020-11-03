@@ -14,15 +14,24 @@
   <script src="{% static 'js/progress-bar-upload.js' %}"></script>
 {% endblock %}
 
-{% block photos_content %}
-  <div style="margin-bottom: 20px;">
-    <button type="button" class="btn btn-primary js-upload-photos">
-      <span class="glyphicon glyphicon-cloud-upload"></span> Upload files
-    </button>
-    <input id="fileupload" type="file" name="file" multiple
-           style="display: none;"
-           data-url="{% url 'filestorage:progress_bar_upload' %}"
-           data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}"}'>
+{% block files_content %}
+  <div class="raw" style="margin-bottom: 20px;">
+      <div class="float-right">
+        <button type="button" class="btn btn-primary js-upload-photos">
+          Upload files
+        </button>
+        <input id="fileupload" type="file" name="file" multiple
+               style="display: none;"
+               data-url="{% url 'filestorage:progress_bar_upload' %}"
+               data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}"}'>
+      </div>
+      <form method="post" action="{% url 'filestorage:clear_database' %}">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ request.path }}">
+        <button type="submit" class="btn btn-danger">
+          Clear Database
+        </button>
+      </form>
   </div>
 
   <table id="gallery" class="table table-bordered">
