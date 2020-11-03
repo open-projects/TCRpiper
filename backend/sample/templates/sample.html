@@ -147,42 +147,50 @@ TCRpiper - a pipeline for TCR sequence treatment. Copyright (C) 2020  D. Malko
               <div class="card h-100 mb-3">
                 <div class="card-body bg-light">
                   <div class="row">
-                    <div class="col-md-6 mb-3">
-                      <div class="dropdown-with-input mb-3">
-                        <label for="smart_name">
-                          <div class="dropdown show">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" id="dropdownSmart" aria-haspopup="true" aria-expanded="false">Smart <span class="required">*</span></a>
-                            <div class="dropdown-menu myDropDown" aria-labelledby="dropdownSmart">
-                              <!-- drop down -->
-                              <table class="table table-borderless table-sm">
-                                <tbody>
-                                  {% for smart in smart_list %}
-                                    <tr class="dropdown-item" name="{{ smart.name }}" id="smartCheck{{ smart.id }}">
-                                      {% if smart.seqcore in used_barcodes.smarts %}
-                                        <th scope="row" class="smartid used_barcode">{{ smart.name }}</th>
-                                        <td class="smartseq used_barcode">{{ smart.seqcore }}</td>
-                                      {% else %}
-                                        <th scope="row" class="smartid">{{ smart.name }}</th>
-                                        <td class="smartseq">{{ smart.seqcore }}</td>
-                                      {% endif %}
-                                    </tr>
-                                  {% endfor %}
-                                </tbody>
-                              </table>
+                    <div class="col-md-12 mb-3">
+                      <div class="card h-100">
+                        <div class="card-body">
+                          <div class="row">
+                            <div class="col-md-6 mb-3">
+                              <div class="dropdown-with-input">
+                                <label for="smart_name">
+                                  <div class="dropdown show">
+                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" id="dropdownSmart" aria-haspopup="true" aria-expanded="false">Smart <span class="required">*</span></a>
+                                    <div class="dropdown-menu myDropDown" aria-labelledby="dropdownSmart">
+                                      <!-- drop down -->
+                                      <table class="table table-borderless table-sm">
+                                        <tbody>
+                                          {% for smart in smart_list %}
+                                            <tr class="dropdown-item" name="{{ smart.name }}" id="smartCheck{{ smart.id }}">
+                                              {% if smart.seqcore in used_barcodes.smarts %}
+                                                <th scope="row" class="smartid used_barcode">{{ smart.name }}</th>
+                                                <td class="smartseq used_barcode">{{ smart.seqcore }}</td>
+                                              {% else %}
+                                                <th scope="row" class="smartid">{{ smart.name }}</th>
+                                                <td class="smartseq">{{ smart.seqcore }}</td>
+                                              {% endif %}
+                                            </tr>
+                                          {% endfor %}
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                  </div>
+                                </label>
+                                <input type="text" class="form-control" name="smart_name" id="smart_name" placeholder="smart name" value="{{ smart_name }}" required>
+                                <div class="invalid-feedback">
+                                  Please enter a valid smart.
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-md-6">
+                              <label for="smart_benchling">Smart Benchling ID</label>
+                              <input type="text" class="form-control" name="smart_benchling" id="smart_benchling" placeholder="Identificator ( allowed symbols: [A-Z_0-9+-] )" value="{{ smart_benchling }}">
+                              <div class="invalid-feedback">
+                                Please enter a valid Benchling ID.
+                              </div>
                             </div>
                           </div>
-                        </label>
-                        <input type="text" class="form-control" name="smart_name" id="smart_name" placeholder="smart name" value="{{ smart_name }}" required>
-                        <div class="invalid-feedback">
-                          Please enter a valid smart.
                         </div>
-                      </div>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                      <label for="smart_benchling">Smart Benchling ID</label>
-                      <input type="text" class="form-control" name="smart_benchling" id="smart_benchling" placeholder="Identificator ( allowed symbols: [A-Z_0-9+-] )" value="{{ smart_benchling }}">
-                      <div class="invalid-feedback">
-                        Please enter a valid Benchling ID.
                       </div>
                     </div>
                   </div>
