@@ -218,8 +218,8 @@ TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
                         <table class="table table-hover">
                           <thead>
                             <tr>
+                              <th scope="col">#</th>
                               <th scope="col">Sample ID</th>
-                              <th scope="col">Name</th>
                               <th scope="col">Owner</th>
                               <th scope="col">Created</th>
                               <th scope="col">Comments</th>
@@ -228,8 +228,8 @@ TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
                           <tbody>
                             {% for sample in sample_list %}
                               <tr onclick="location.href='{% url 'sample:sample_get' experiment_id sample.id %}'" style="cursor:pointer;">
-                                <td scope="row">{{ sample.ident }}</td>
-                                <td>{{ sample.name }}</td>
+                                <td scope="row">{{ sample.id }}</td>
+                                <td>{{ sample.ident }}</td>
                                 <td>{{ sample.owner }}</td>
                                 <td>{{ sample.date }}</td>
                                 <td>{{ sample.comments }}</td>
