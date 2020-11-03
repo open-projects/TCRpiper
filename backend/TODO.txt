@@ -1,0 +1,9 @@
+1) add a number of total reads in an experiment (it should depend on a type of using kits)
++ a number of reserved reads for each sample
++ a number of `free` reads in the experiment
+
+2) User ?
+
+3) Dropdown for a project name in the new sample section (maybe create a new section for projects with projects names)
+
+
