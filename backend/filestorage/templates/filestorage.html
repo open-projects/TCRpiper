@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block files_content %}
+  <table id="file_list" class="table table-bordered">
+    <thead>
+      <tr>
+        <th>
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-1">
+                File(s)
+              </div>
+              <div class="col-sm my-auto">
+                <div class="progress" style="display: none;" id="upload_progressbar">
+                  <div class="progress-bar progress-bar-striped" role="progressbar" style="width: 0%;">0%</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in file_list %}
+        <tr>
+          <td><a href="{{ item.file.url }}">{{ item.file.name }}</a></td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="raw" style="margin-bottom: 20px;">
+    <div class="float-right">
+      <button type="button" class="btn btn-primary file-upload">
+        Upload files
+      </button>
+      <input id="file_upload" type="file" name="file"
+             multiple
+             style="display: none;"
+             data-url="{% url 'filestorage:data_upload' %}"
+             data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}"}'>
+    </div>
+    <form method="post" action="{% url 'filestorage:data_cleanup' %}">
+      {% csrf_token %}
+      <input type="hidden" name="next" value="{{ request.path }}">
+      <button type="submit" class="btn btn-danger">
+        Cleanup
+      </button>
+    </form>
+  </div>
+
+{% endblock %}

@@ -1,32 +1,34 @@
-import time
-
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.views import View
+from django import forms
 
-from .forms import PhotoForm
-from .models import Photo
+from .models import File
 
 
-class ProgressBarUploadView(View):
+class FileForm(forms.ModelForm):
+    class Meta:
+        model = File
+        fields = ('file', )
+
+
+class FileUploadView(View):
     def get(self, request):
-        photos_list = Photo.objects.all()
-        return render(self.request, 'upload/progress_bar_upload/index.html', {'photos': photos_list})
+        file_list = File.objects.all()
+        return render(self.request, 'filestorage.html', {'file_list': file_list})
 
     def post(self, request):
-        time.sleep(1)  # You don't need this line. This is just to delay the process so you can see the progress bar testing locally.
-        form = PhotoForm(self.request.POST, self.request.FILES)
+        form = FileForm(self.request.POST, self.request.FILES)
         if form.is_valid():
-            photo = form.save()
-            data = {'is_valid': True, 'name': photo.file.name, 'url': photo.file.url}
+            data = form.save()
+            context = {'is_valid': True, 'name': data.file.name, 'url': data.file.url}
         else:
-            data = {'is_valid': False}
-        return JsonResponse(data)
+            context = {'is_valid': False}
+        return JsonResponse(context)
 
 
-
-def clear_database(request):
-    for photo in Photo.objects.all():
-        photo.file.delete()
-        photo.delete()
+def data_cleanup(request):
+    for item in File.objects.all():
+        item.file.delete()
+        item.delete()
     return redirect(request.POST.get('next'))
