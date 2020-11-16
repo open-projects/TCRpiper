@@ -7,3 +7,8 @@
 3) Dropdown for a project name in the new sample section (maybe create a new section for projects with projects names)
 
 
+################
+add button "reopen experiment"
+
+uniq experiment_id + index
+

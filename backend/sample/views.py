@@ -41,9 +41,9 @@ def get(request, experiment_id, sample_id=0):
         #raise Http404("Experiment does not exist")
         return HttpResponseRedirect(reverse('experiment:experiment_stock'))
 
-    alfa_index_list = Index.objects.filter(type='alfa').order_by('id')
-    beta_index_list = Index.objects.filter(type='beta').order_by('id')
-    smart_list = Smart.objects.order_by('id')
+    alfa_index_list = Index.objects.filter(type='alfa').order_by('name')
+    beta_index_list = Index.objects.filter(type='beta').order_by('name')
+    smart_list = Smart.objects.order_by('name')
     context = {  # for project creation
         'experiment_id': experiment.id,
         'sample_id': 0,
