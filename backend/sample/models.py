@@ -14,7 +14,7 @@ class Sample(models.Model):
     experiment_id = models.IntegerField()
     name = models.CharField(max_length=200, default='')
     project = models.CharField(max_length=200)
-    ident = models.CharField(max_length=200, unique=True)
+    ident = models.CharField(max_length=200)
     plate = models.CharField(max_length=200, default='')
     well = models.CharField(max_length=200, default='')
     cell_number = models.IntegerField(default=0)
