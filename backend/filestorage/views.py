@@ -16,7 +16,7 @@ class FileUploadView(View):
     def get(self, request):
         file_list = File.objects.all()
         context = {'file_list': file_list}
-        return render(self.request, 'filestorage.html', context)
+        return redirect(request, context=context)
 
     def post(self, request):
         form = FileForm(self.request.POST, self.request.FILES)
@@ -37,3 +37,4 @@ def data_cleanup(request):
         item.file.delete()
         item.delete()
     return redirect(request.POST.get('next'))
+

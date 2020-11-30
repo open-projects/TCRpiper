@@ -1,9 +1,5 @@
-{% extends 'base.html' %}
-
 {% load static %}
-
-{% block files_content %}
-  <table id="file_list" class="table table-bordered">
+  <table id="file_list" class="table">
     <thead>
       <tr>
         <th>
@@ -40,7 +36,7 @@
              multiple
              style="display: none;"
              data-url="{% url 'filestorage:data_upload' %}"
-             data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}", "experiment_id": "12"}'> <!-- INSERT experiment_id PROGRAMATICALLY !!! -->
+             data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}", "experiment_id": "13"}'> <!-- INSERT experiment_id PROGRAMATICALLY !!! -->
     </div>
     <form method="post" action="{% url 'filestorage:data_cleanup' %}">
       {% csrf_token %}
@@ -50,5 +46,3 @@
       </button>
     </form>
   </div>
-
-{% endblock %}

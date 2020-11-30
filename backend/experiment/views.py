@@ -162,3 +162,45 @@ def submit(request, experiment_id):
 
     return HttpResponseRedirect(reverse('experiment:experiment_stock'))
 
+
+def open(request, experiment_id):
+    try:
+        experiment = Experiment.objects.get(id=experiment_id)
+    except Exception:
+        raise Http404("Experiment does not exist")
+    experiment.status = 'open'
+    experiment.save()
+
+    return HttpResponseRedirect(reverse('experiment:experiment_stock'))
+
+
+def processing(request, experiment_id=0):
+    if experiment_id:
+        try:
+            experiment = Experiment.objects.get(id=experiment_id)
+        except Exception:
+            #raise Http404("Experiment does not exist")
+            return HttpResponseRedirect(reverse('experiment:experiment_stock'))
+
+        sample_list = Sample.objects.filter(experiment_id=experiment.id).order_by('id').reverse()
+        context = {
+            'experiment_id': experiment.id,
+            'experiment_status': experiment.status,
+            'sample_list': sample_list,
+            'num_of_samples': len(sample_list),
+            'settings': [
+                ['IEM File Version', experiment.iem_file_version],
+                ['Experiment name', experiment.name],
+                ['Description', experiment.description],
+                ['Workflow', experiment.workflow],
+                ['Application', experiment.application],
+                ['Assay', experiment.assay],
+                ['Chemistry', experiment.chemistry],
+                ['Reverse/Complement', str(experiment.rev_compl)],  # str() is important !!!
+                ['Reads 1', experiment.reads_1],
+                ['Reads 2', experiment.reads_2]
+            ]
+        }
+        return render(request, 'experiment_processing.html', context)
+    return HttpResponseRedirect(reverse('experiment:experiment_stock'))
+

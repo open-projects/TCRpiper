@@ -92,14 +92,13 @@ TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
               {% for experiment in experiment_list %}
                 <tr class=
                 {% if experiment.status == 'open' %}
-                  "table-success"
+                  "table-success" onclick="location.href='{% url 'experiment:experiment_get' experiment.id %}'
                 {% elif experiment.status == 'closed' %}
-                  "table-primary"
+                  "table-primary" onclick="location.href='{% url 'experiment:experiment_proc' experiment.id %}'
                 {% else %}
                   ""
                 {% endif %}
-                onclick="location.href='{% url 'experiment:experiment_get' experiment.id %}'"
-                style="cursor: pointer;" name="{{ experiment.id }}" id="experimentID{{ experiment.id }}"
+                "style="cursor: pointer;" name="{{ experiment.id }}" id="experimentID{{ experiment.id }}"
                 >
                   <td scope="row">{{ experiment.id }}</td>
                   <td>{{ experiment.name }}</td>
