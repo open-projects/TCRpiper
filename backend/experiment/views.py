@@ -191,6 +191,7 @@ def processing(request, experiment_id=0):
             'sample_list': sample_list,
             'num_of_samples': len(sample_list),
             'file_list': file_list,
+            'num_of_files': len(file_list),
             'settings': [
                 ['IEM File Version', experiment.iem_file_version],
                 ['Experiment name', experiment.name],
