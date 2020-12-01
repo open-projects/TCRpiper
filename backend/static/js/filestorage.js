@@ -30,7 +30,8 @@ $(function () {
       if (data.result.is_valid) {
         $("#file_list tbody").prepend(
           "<tr><td><a href='" + data.result.url + "'>" + data.result.name + "</a></td></tr>"
-        )
+        );
+        $("#clean_up").addClass("visible").removeClass("invisible");
       }
     }
 

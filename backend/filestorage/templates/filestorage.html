@@ -39,14 +39,14 @@
              data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}", "experiment_id": "{{ experiment_id}}"}'
       >
     </div>
-    {% if num_of_files > 0 %}
-    <form method="post" action="{% url 'filestorage:data_cleanup' %}">
-      {% csrf_token %}
-      <input type="hidden" name="next" value="{{ request.path }}">
-      <input type="hidden" name="experiment_id" value="{{ experiment_id }}">
-      <button type="submit" class="btn btn-danger">
-        Cleanup
-      </button>
-    </form>
-    {% endif %}
+    <div class={% if num_of_files > 0 %}"visible"{% else %}"invisible"{% endif %} id="clean_up">
+      <form method="post" action="{% url 'filestorage:data_cleanup' %}">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ request.path }}">
+        <input type="hidden" name="experiment_id" value="{{ experiment_id }}">
+        <button type="submit" class="btn btn-danger">
+          Cleanup
+        </button>
+      </form>
+    </div>
   </div>
