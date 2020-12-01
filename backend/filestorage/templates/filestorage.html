@@ -36,11 +36,13 @@
              multiple
              style="display: none;"
              data-url="{% url 'filestorage:data_upload' %}"
-             data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}", "experiment_id": "13"}'> <!-- INSERT experiment_id PROGRAMATICALLY !!! -->
+             data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}", "experiment_id": "{{ experiment_id}}"}'
+      >
     </div>
     <form method="post" action="{% url 'filestorage:data_cleanup' %}">
       {% csrf_token %}
       <input type="hidden" name="next" value="{{ request.path }}">
+      <input type="hidden" name="experiment_id" value="{{ experiment_id }}">
       <button type="submit" class="btn btn-danger">
         Cleanup
       </button>

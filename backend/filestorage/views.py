@@ -1,7 +1,9 @@
+import os
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.views import View
 from django import forms
+from django.conf import settings
 
 from .models import File
 
@@ -13,11 +15,6 @@ class FileForm(forms.ModelForm):
 
 
 class FileUploadView(View):
-    def get(self, request):
-        file_list = File.objects.all()
-        context = {'file_list': file_list}
-        return redirect(request, context=context)
-
     def post(self, request):
         form = FileForm(self.request.POST, self.request.FILES)
         if form.is_valid():
@@ -33,8 +30,14 @@ class FileUploadView(View):
 
 
 def data_cleanup(request):
-    for item in File.objects.all():
+    for item in File.objects.filter(experiment_id=request.POST.get('experiment_id')):
         item.file.delete()
         item.delete()
+
+    for root, dirs, files in os.walk(settings.MEDIA_ROOT):  # cleanup empty dirs
+        for d in dirs:
+            dir = os.path.join(root, d)
+            if not os.listdir(dir):  # check if dir is empty
+                os.rmdir(dir)
     return redirect(request.POST.get('next'))
 

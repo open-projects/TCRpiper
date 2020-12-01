@@ -10,6 +10,7 @@ from django.urls import reverse
 
 from .models import Experiment, APPLICATION_TYPE, WORKFLOW_TYPE, ASSAY_TYPE, CHEMISTRY, REVCOMPL, DEFAULT_READS, FILE_VERSION
 from sample.models import Sample
+from filestorage.models import File
 
 
 def stock(request):
@@ -183,11 +184,13 @@ def processing(request, experiment_id=0):
             return HttpResponseRedirect(reverse('experiment:experiment_stock'))
 
         sample_list = Sample.objects.filter(experiment_id=experiment.id).order_by('id').reverse()
+        file_list = File.objects.filter(experiment_id=experiment.id)
         context = {
             'experiment_id': experiment.id,
             'experiment_status': experiment.status,
             'sample_list': sample_list,
             'num_of_samples': len(sample_list),
+            'file_list': file_list,
             'settings': [
                 ['IEM File Version', experiment.iem_file_version],
                 ['Experiment name', experiment.name],

@@ -1,1 +1,1 @@
-# the directory for files
+# the directory for uploaded files
