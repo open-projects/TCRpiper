@@ -145,6 +145,9 @@ TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
             {% endif %}
           </div>
           <div class="card-footer">
+            <div class="float-right {% if num_of_files > 0 %}visible{% else %}invisible{% endif %}" id="execute">
+              <a class="btn btn-success" href="">Execute</a>
+            </div>
             <a class="btn" href="{% url 'experiment:experiment_open' experiment_id %}">Re-open</a>
             <a class="btn btn-secondary" href="{% url 'experiment:experiment_arch' experiment_id %}">Archive</a>
           </div>
