@@ -17,13 +17,6 @@ class FileForm(forms.ModelForm):
 class FileUploadView(View):
     def post(self, request):
         form = FileForm(self.request.POST, self.request.FILES)
-
-        for item in File.objects.filter(experiment_id=request.POST.get('experiment_id')):
-            print(item.file.file)
-
-            item.file.delete()
-            item.delete()
-
         if form.is_valid():
             data = form.save()
             context = {
