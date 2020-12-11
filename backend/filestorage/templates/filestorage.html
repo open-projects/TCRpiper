@@ -44,9 +44,33 @@
         {% csrf_token %}
         <input type="hidden" name="next" value="{{ request.path }}">
         <input type="hidden" name="experiment_id" value="{{ experiment_id }}">
-        <button type="submit" class="btn btn-danger">
+
+        <!-- Cleanup trigger modal -->
+        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#cleanupModal">
           Cleanup
         </button>
+
+        <!-- Cleanup Modal -->
+        <div class="modal fade" id="cleanupModal" tabindex="-1" role="dialog" aria-labelledby="cleanupModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="cleanupModalLabel">File CleanUp</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                All files will be deleted!
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-danger">Delete files</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </form>
     </div>
   </div>
