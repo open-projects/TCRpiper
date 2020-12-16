@@ -22,11 +22,11 @@ def norm_index_type(type):
 
 class Smart(models.Model):
     name = models.CharField(max_length=200, unique=True)
-    seq = models.CharField(max_length=200, unique=True)
+    seq = models.CharField(db_index=True, max_length=200, unique=True)
     source = models.CharField(max_length=200)
     date = models.DateField(auto_now_add=True)
     comment = models.TextField(default='')
-    seqcore = models.CharField(max_length=200, default='')
+    seqcore = models.CharField(db_index=True, max_length=200, default='')
     seqmarked = models.CharField(max_length=200, default='')
 
     @classmethod
@@ -46,11 +46,11 @@ class Smart(models.Model):
 class Index(models.Model):
     name = models.CharField(max_length=200, unique=True)
     type = models.CharField(max_length=200, choices=INDEX_TYPE)
-    seq = models.CharField(max_length=200, unique=True)
+    seq = models.CharField(db_index=True, max_length=200, unique=True)
     source = models.CharField(max_length=200)
     date = models.DateField(auto_now_add=True)
     comment = models.TextField(default='')
-    seqcore = models.CharField(max_length=200, default='')
+    seqcore = models.CharField(db_index=True, max_length=200, default='')
     seqmarked = models.CharField(max_length=200, default='')
 
     @classmethod
