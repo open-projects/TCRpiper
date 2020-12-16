@@ -10,7 +10,8 @@ PYTHON_PATH = 'python3'
 PIPER_PATH = '../../'
 PIPER_NAME = 'tcrpiper.py'
 MAX_MEMORY = '20G'
-LOG_FILE = 'output.log'
+OUT_DIRNAME = 'output'
+LOG_FILE = 'pipeline.log'
 
 PIPER = ''.join((PYTHON_PATH, ' ', PIPER_PATH, PIPER_NAME))
 
