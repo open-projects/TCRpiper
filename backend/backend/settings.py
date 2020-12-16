@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'experiment.apps.ExperimentConfig',
     'configurator.apps.ConfiguratorConfig',
     'filestorage.apps.FilestorageConfig',
+    'pipeline.apps.PipelineConfig',
 ]
 
 MIDDLEWARE = [

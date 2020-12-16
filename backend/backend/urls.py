@@ -15,6 +15,7 @@ urlpatterns = [
     path(r'sample/', include('sample.urls')),
     path(r'configurator/', include('configurator.urls')),
     path(r'filestorage/', include('filestorage.urls')),
+    path(r'pipeline/', include('pipeline.urls')),
     #re_path(r'^$', include('tcrpiper.urls')),
 ]
 
