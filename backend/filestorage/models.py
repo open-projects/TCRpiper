@@ -2,8 +2,7 @@
 TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
 '''
 
-from __future__ import unicode_literals
-
+import re
 from django.db import models
 
 

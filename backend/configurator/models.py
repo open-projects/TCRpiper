@@ -1,3 +1,4 @@
+import re
 from django.db import models
 from django.template.loader import render_to_string
 from sample.models import Sample
@@ -23,10 +24,10 @@ def makeSampleinfo(experiment):
             alfa_name = sample.get_alfa_name()
             chain = 'TRA'
             barcodes = sample.get_smart_seqcore()
-            r1 = '_'.join((sample.get_alfa_name(), 'S' + str(n), 'L001', 'R1', '001.fastq.gz '))
+            r1 = '_'.join((re.sub(r'_', '-', alfa_name), 'S' + str(n), 'L001', 'R1', '001.fastq.gz '))  # re.sub(r'_', '-', alfa_name) !!! illumina replaces '_' symbol by '-'
             r2 = ''
             if paired:
-                r2 = '_'.join((sample.get_alfa_name(), 'S' + str(n), 'L001', 'R2', '001.fastq.gz '))
+                r2 = '_'.join((re.sub(r'_', '-', alfa_name), 'S' + str(n), 'L001', 'R2', '001.fastq.gz '))  # re.sub(r'_', '-', alfa_name) !!! illumina replaces '_' symbol by '-'
             baseline = ''
             subject_id = ''
             antigen = ''
@@ -40,10 +41,10 @@ def makeSampleinfo(experiment):
             beta_name = sample.get_beta_name()
             chain = 'TRB'
             barcodes = sample.get_smart_seqcore()
-            r1 = '_'.join((sample.get_beta_name(), 'S' + str(n), 'L001', 'R1', '001.fastq.gz'))
+            r1 = '_'.join((re.sub(r'_', '-', beta_name), 'S' + str(n), 'L001', 'R1', '001.fastq.gz'))  # re.sub(r'_', '-', beta_name) !!! illumina replaces '_' symbol by '-'
             r2 = ''
             if paired:
-                r2 = '_'.join((sample.get_beta_name(), 'S' + str(n), 'L001', 'R2', '001.fastq.gz'))
+                r2 = '_'.join((re.sub(r'_', '-', beta_name), 'S' + str(n), 'L001', 'R2', '001.fastq.gz'))  # re.sub(r'_', '-', beta_name) !!! illumina replaces '_' symbol by '-'
             baseline = ''
             subject_id = ''
             antigen = ''

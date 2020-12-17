@@ -8,6 +8,7 @@ from django.urls import reverse
 
 from experiment.models import Experiment
 from .models import makeSamplesheet, makeSampleinfo
+from .settings import SAMPLE_INFO_FILENAME, SAMPLE_SHEET_FILENAME
 
 
 def samplesheet(request, experiment_id=0):
@@ -20,7 +21,7 @@ def samplesheet(request, experiment_id=0):
 
     message = makeSamplesheet(experiment)
     response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="SampleSheet.csv"'
+    response['Content-Disposition'] = 'attachment; filename="' + SAMPLE_SHEET_FILENAME + '"'
     response.write(message)
 
     return response
@@ -36,7 +37,7 @@ def sampleinfo(request, experiment_id=0):
 
     message = makeSampleinfo(experiment)
     response = HttpResponse(content_type='text/txt')
-    response['Content-Disposition'] = 'attachment; filename="Sample_Info.txt"'
+    response['Content-Disposition'] = 'attachment; filename="' + SAMPLE_INFO_FILENAME + '"'
     response.write(message)
 
     return response
