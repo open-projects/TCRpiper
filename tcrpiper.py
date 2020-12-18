@@ -9,27 +9,40 @@ import os
 import re
 import glob
 import argparse
+import shutil
+import subprocess
 
 # It requires R packages: ggplot2, reshape
 
 def main():
     input_parser = argparse.ArgumentParser(description='TCRpiper: a pipeline for treatment of TCR sequences.')
     input_parser.add_argument('-i', metavar='/path/to/input_dir', help='the path to the input directory (the directory has to have a SampleInfo file)', required=True)
-    input_parser.add_argument('-o', metavar='/path/to/output_dir', default='.', help='the path to the output directory', required=False)
+    input_parser.add_argument('-o', metavar='/path/to/output_dir', default=None, help='the path to the output directory', required=False)
     input_parser.add_argument('-m', metavar='6G', default='6G', help='Xmx memory size', required=False)
     input_parser.add_argument('-f', metavar='threshold_value', default=0, help='force overseq threshold', required=False)
     input_parser.add_argument('-c', action='store_true', help='force collision filter', required=False )
     input_parser.add_argument('-b', metavar='/path/to/bin', default=None, help='the global path to a bin directory with the programs', required=False)
     input_parser.add_argument('-l', metavar='/path/to/file_name.log', default=None, help='the log file', required=False)
+    input_parser.add_argument('-z', action='store_true', help='compress output', required=False )
+    input_parser.add_argument('-r', action='store_true', help='remove sequence files from output', required=False )
 
     args = input_parser.parse_args()
-    in_dir = re.sub(r'\/$', '', args.i)
-    out_dir = re.sub(r'\/$', '', args.o)
+    in_dir = re.sub(r'(.)\/$', r'\1', args.i)
+    out_dir = re.sub(r'(.)\/$', r'\1', args.o) if args.o else args.o
     xmx_size = args.m
     bin_path = args.b
     log_file = args.l
     overseq = args.f
     collisions = args.c
+    compress = args.z
+    remove_seq = args.r
+
+    if not out_dir:
+        out_dir = '/output' if in_dir == '/' else in_dir + '/output'
+    elif out_dir in ('.', '..'):
+        out_dir = out_dir + '/output'
+    elif out_dir == '/':
+        out_dir = '/output'
 
     enr = out_dir + '/ENR'
     qc = out_dir + '/runQC'
@@ -66,10 +79,31 @@ def main():
         log.add('>>>Filter<<<\n' + vdjtools.Filter())
     except Exception as error:
         log.add('\nVDJtools error:\n{}'.format(error))
+        log.write()
         exit('...error')
 
     log.add('\n...done')
     log.write()
+
+    if remove_seq:
+        cmd_array = ['find', out_dir, '-name', '*.gz', '-delete']
+        subprocess.run(cmd_array)
+
+    if compress:
+        if out_dir == '.' or out_dir == '..':
+            archive = '../output.tar.gz'
+        else:
+            archive = out_dir + '.tar.gz'
+        cmd_array = ['tar', '-zcf', archive, '-C', out_dir, '.']
+        subprocess.run(cmd_array)
+
+        try:
+            shutil.rmtree(out_dir)
+        except Exception as error:
+            log.add('\nFile cleanup error:\n{}'.format(error))
+            log.write()
+            exit('...error')
+
     print('...done')
 
 # end of main()
