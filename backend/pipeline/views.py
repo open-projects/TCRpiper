@@ -15,7 +15,7 @@ from pipeline import settings as pipelne_settings
 from configurator.models import makeSampleinfo
 from configurator.settings import SAMPLE_INFO_FILENAME, SAMPLE_INFO_PATTERN
 from filestorage.models import File
-from . models import ExecuteQueue
+from . models import TaskQueue
 
 def get(request, experiment_id=0):
     if experiment_id:
@@ -46,11 +46,14 @@ def get(request, experiment_id=0):
                  '-z',
                  '-r',
                  ]
+    cmd_string = ' '.join(cmd_array)
     process = subprocess.Popen(cmd_array)
-    pid = process.pid
+
+    task = TaskQueue(experiment_id=experiment.id, pid=process.pid, status='inprogress', cmd=cmd_string)
+    task.save()
 
     context = {
-        'cmd': 'cmd: ' + ' '.join(cmd_array) + '  pid: ' + str(pid),
+        'cmd': 'cmd: ' + cmd_string + '  pid: ' + str(process.pid),
     }
 
     return render(request, 'pipeline.html', context)
