@@ -15,7 +15,7 @@ from pipeline import settings as pipelne_settings
 from configurator.models import makeSampleinfo
 from configurator.settings import SAMPLE_INFO_FILENAME, SAMPLE_INFO_PATTERN
 from filestorage.models import File
-from . models import TaskQueue
+from . models import TaskQueue, taskRemover
 
 def get(request, experiment_id=0):
     if experiment_id:
@@ -36,25 +36,56 @@ def get(request, experiment_id=0):
 
     input_path = '.' + re.sub(r'/[^/]*$', '/', file_item.file.url)
     output_path = input_path + pipelne_settings.OUT_DIRNAME
-    log_path = output_path + '/' + pipelne_settings.LOG_FILE
+    log_file = output_path + '/' + pipelne_settings.LOG_FILE
+    compressed_file = input_path + '/' + pipelne_settings.OUT_FILE
     cmd_array = [pipelne_settings.PYTHON_PATH,
                  pipelne_settings.PIPER_PATH,
+                 '-m', pipelne_settings.MAX_MEMORY,
                  '-i', input_path,
                  '-o', output_path,
-                 '-l', log_path,
-                 '-m', pipelne_settings.MAX_MEMORY,
-                 '-z',
+                 '-l', log_file,
+                 '-z', compressed_file,
+                 '-p', str(pipelne_settings.PORT),
                  '-r',
                  ]
     cmd_string = ' '.join(cmd_array)
-    process = subprocess.Popen(cmd_array)
 
-    task = TaskQueue(experiment_id=experiment.id, pid=process.pid, status='inprogress', cmd=cmd_string)
-    task.save()
-
-    context = {
-        'cmd': 'cmd: ' + cmd_string + '  pid: ' + str(process.pid),
-    }
+    taskRemover()  # remove completed tasks
+    new_task = None
+    for k in range(pipelne_settings.THREADS):  # find an empty slot for the new task
+        task_in_process = TaskQueue.objects.filter(thread=k).first()
+        if not task_in_process:
+            try:
+                new_task = TaskQueue(experiment_id=experiment.id, thread=k, status='wait', cmd=cmd_string)
+                new_task.save()
+            except Exception:
+                continue
+            else:
+                break
+    if new_task:
+        try:
+            process = subprocess.Popen(cmd_array)
+        except:
+            context = {
+                'cmd': "can't run a new process!",
+            }
+        else:
+            try:
+                new_task.pid = process.pid
+                new_task.status = 'inprogress'
+                new_task.save()
+            except Exception:
+                context = {
+                    'cmd': 'the process has finished abnormally!',
+                }
+            else:
+                context = {
+                    'cmd': 'cmd: ' + cmd_string + '  pid: ' + str(process.pid),
+                }
+    else:
+        context = {
+            'cmd': "all slots are taken!",
+        }
 
     return render(request, 'pipeline.html', context)
 

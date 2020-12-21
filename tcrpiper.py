@@ -24,7 +24,7 @@ def main():
     input_parser.add_argument('-c', action='store_true', help='force collision filter', required=False )
     input_parser.add_argument('-b', metavar='/path/to/bin', default=None, help='the global path to a bin directory with the programs', required=False)
     input_parser.add_argument('-l', metavar='/path/to/file_name.log', default=None, help='the log file', required=False)
-    input_parser.add_argument('-z', action='store_true', help='compress output', required=False )
+    input_parser.add_argument('-z', metavar='/path/to/file_name.tar.gz', default=None, help='the compressed file', required=False)
     input_parser.add_argument('-r', action='store_true', help='remove sequence files from output', required=False )
     input_parser.add_argument('-p', metavar='10000', default=None, help='a socket port number to prevent running multiple instances', required=False)
 
@@ -36,7 +36,7 @@ def main():
     log_file = args.l
     overseq = args.f
     collisions = args.c
-    compress = args.z
+    compressed = args.z
     remove_seq = args.r
     port= int(args.p)
 
@@ -107,12 +107,8 @@ def main():
         cmd_array = ['find', out_dir, '-name', '*.gz', '-delete']
         subprocess.run(cmd_array)
 
-    if compress:
-        if out_dir == '.' or out_dir == '..':
-            archive = '../output.tar.gz'
-        else:
-            archive = out_dir + '.tar.gz'
-        cmd_array = ['tar', '-zcf', archive, '-C', out_dir, '.']
+    if compressed:
+        cmd_array = ['tar', '-zcf', compressed, '-C', out_dir, '.']
         subprocess.run(cmd_array)
 
         try:
