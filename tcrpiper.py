@@ -11,6 +11,7 @@ import glob
 import argparse
 import shutil
 import subprocess
+import socket
 
 # It requires R packages: ggplot2, reshape
 
@@ -25,6 +26,7 @@ def main():
     input_parser.add_argument('-l', metavar='/path/to/file_name.log', default=None, help='the log file', required=False)
     input_parser.add_argument('-z', action='store_true', help='compress output', required=False )
     input_parser.add_argument('-r', action='store_true', help='remove sequence files from output', required=False )
+    input_parser.add_argument('-p', metavar='10000', default=None, help='a socket port number to prevent running multiple instances', required=False)
 
     args = input_parser.parse_args()
     in_dir = re.sub(r'(.)\/$', r'\1', args.i)
@@ -36,6 +38,19 @@ def main():
     collisions = args.c
     compress = args.z
     remove_seq = args.r
+    port= int(args.p)
+
+    if port:  # open a socket connection to prevent running multiple instances of the script
+        try:
+            # create a TCP/IP socket
+            my_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+            # bind the socket to the port
+            server_address = ('localhost', port)
+            print('starting up on {} port {}'.format(*server_address))
+            my_sock.bind(server_address)
+        except Exception as error:
+            exit("can't start: an instance of the script is running\n")
 
     if not out_dir:
         out_dir = '/output' if in_dir == '/' else in_dir + '/output'
@@ -84,6 +99,9 @@ def main():
 
     log.add('\n...done')
     log.write()
+
+    if port:
+        my_sock.close()  # now we are able to run another instance
 
     if remove_seq:
         cmd_array = ['find', out_dir, '-name', '*.gz', '-delete']
