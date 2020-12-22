@@ -9,6 +9,7 @@ from django.core.files.base import ContentFile
 from django.urls import reverse
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
+from django.http import Http404
 
 from experiment.models import Experiment
 from pipeline import settings as pipelne_settings
@@ -56,7 +57,11 @@ def get(request, experiment_id=0):
         task_in_process = TaskQueue.objects.filter(thread=k).first()
         if not task_in_process:
             try:
-                new_task = TaskQueue(experiment_id=experiment.id, thread=k, status='wait', cmd=cmd_string)
+                new_task = TaskQueue(experiment_id=experiment.id,
+                                     thread=k,
+                                     cmd=cmd_string,
+                                     output_file=compressed_file
+                                     )
                 new_task.save()
             except Exception:
                 continue
@@ -64,28 +69,27 @@ def get(request, experiment_id=0):
                 break
     if new_task:
         try:
-            process = subprocess.Popen(cmd_array)
-        except:
-            context = {
-                'cmd': "can't run a new process!",
-            }
+            process = subprocess.Popen(cmd_array, stdin=None, stdout=None, stderr=None, shell=False, close_fds=True)
+        except Exception:
+            raise Http404("Can't run a new process!")
         else:
             try:
                 new_task.pid = process.pid
-                new_task.status = 'inprogress'
                 new_task.save()
             except Exception:
-                context = {
-                    'cmd': 'the process has finished abnormally!',
-                }
+                raise Http404("Can't update the process status!")
             else:
-                context = {
-                    'cmd': 'cmd: ' + cmd_string + '  pid: ' + str(process.pid),
-                }
+                try:
+                    experiment.output_file = compressed_file
+                    experiment.output_dir = output_path
+                    experiment.output_status = 'ongoing'
+                    experiment.save()
+                except Exception:
+                    return HttpResponseRedirect(reverse('experiment:experiment_stock'))
     else:
         context = {
-            'cmd': "all slots are taken!",
+            'cmd': "All server slots are taken! Try later...",
         }
 
-    return render(request, 'pipeline.html', context)
+    return HttpResponseRedirect(reverse('experiment:experiment_stock'))
 

@@ -2,19 +2,13 @@
 TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
 '''
 
+import shutil
 from django.db import models
 
 from sample.models import Sample
-
-
-EXPERIMENT_STATUS = (('open', 'Open'), ('closed', 'Closed'), ('archived', 'Archived'))
-WORKFLOW_TYPE = (('GenerateFASTQ', 'Generate FASTQ'), ('other', 'Other'))
-APPLICATION_TYPE = (('FASTQ Only', 'FASTQ Only'), ('other', 'Other'))
-ASSAY_TYPE = (('TruSeq HT', 'TruSeq HT'), ('other', 'Other'))
-CHEMISTRY = (('Amplicon', 'Amplicon'), ('other', 'Other'))
-REVCOMPL = (('0', 'No'), ('1', 'Yes'))
-DEFAULT_READS = 166
-FILE_VERSION = 4
+from filestorage.models import cleanup
+from .settings import EXPERIMENT_STATUS, FILE_VERSION, WORKFLOW_TYPE, APPLICATION_TYPE
+from .settings import ASSAY_TYPE, CHEMISTRY, REVCOMPL, RESULT_STATUS
 
 
 class Experiment(models.Model):
@@ -35,6 +29,18 @@ class Experiment(models.Model):
     rev_compl = models.IntegerField(choices=REVCOMPL, default=0)
     # adapter = models.CharField(max_length=200, default='AGATCGGAAGAGCACACGTCTGAACTCCAGTCA')
     # adapter_read2 = models.CharField(max_length=200, default='AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT')
+    output_status = models.CharField(max_length=200, choices=RESULT_STATUS, default='incomplete')
+    output_dir = models.CharField(max_length=200, default='')
+    output_file = models.CharField(max_length=200, default='')
+
+    def delete(self, using=None, keep_parents=False):
+        try:
+            cleanup(self.id)  # delete files associated with the Experiment object
+            shutil.rmtree(self.output_dir)  # delete the rest files
+        except Exception:
+            print("can't remove output dir for experiment {}".format(self.id))
+        super().delete(using=using, keep_parents=keep_parents)  # delete the Experiment object
+
 
     def num_of_samples(self):
         sample_list = Sample.objects.filter(experiment_id=self.id)

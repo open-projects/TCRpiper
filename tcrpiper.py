@@ -108,6 +108,8 @@ def main():
         subprocess.run(cmd_array)
 
     if compressed:
+        if os.path.exists(compressed):
+            os.remove(compressed)
         cmd_array = ['tar', '-zcf', compressed, '-C', out_dir, '.']
         subprocess.run(cmd_array)
 

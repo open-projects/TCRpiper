@@ -3,18 +3,28 @@ TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
 '''
 
 import re
+import os.path
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.http import Http404
 from django.urls import reverse
 
-from .models import Experiment, APPLICATION_TYPE, WORKFLOW_TYPE, ASSAY_TYPE, CHEMISTRY, REVCOMPL, DEFAULT_READS, FILE_VERSION
+from .models import Experiment
+from .settings import APPLICATION_TYPE, WORKFLOW_TYPE, ASSAY_TYPE, CHEMISTRY, REVCOMPL, DEFAULT_READS, FILE_VERSION
 from sample.models import Sample
-from filestorage.models import File
+from filestorage.models import File, cleanup
 
 
 def stock(request):
     experiment_list = Experiment.objects.order_by('id').reverse()
+    # mark completed tasks as 'ready'
+    for experiment in experiment_list:
+        if experiment.output_status != 'ready':
+            out_file = experiment.output_file
+            if os.path.exists(out_file):
+                experiment.output_status = 'ready'
+                experiment.save()
+
     context = {
         'experiment_list': experiment_list,
         'num_of_experiments': len(experiment_list),
