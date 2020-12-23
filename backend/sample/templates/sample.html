@@ -345,7 +345,7 @@ TCRpiper - a pipeline for TCR sequence treatment. Copyright (C) 2020  D. Malko
               </div>
             </div>
             <div class="card-footer">
-              {% if experiment_id and experiment_status == 'open' %}
+              {% if experiment_id and experiment_status == 'open' and sample_id != 0 %}
                 <a class="btn btn-danger" id="deleteExperiment" href="{% url 'sample:sample_del' experiment_id sample_id %}">Delete</a>
               {% endif %}
               <button type="button" class="btn invisible">placeholder</button>
