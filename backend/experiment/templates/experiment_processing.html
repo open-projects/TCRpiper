@@ -164,7 +164,7 @@ TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
                         <label class="custom-control-label" for="keepSequences">Remove filtered sequences</label>
                       </div>
                       <div class="float-right in-stock-visible {% if num_of_files > 0 %}visible{% else %}invisible{% endif %}">
-                        <a class="btn btn-success" href="">Execute</a>
+                        <a class="btn btn-success" href="{% url 'pipeline:pipeline_get' experiment_id %}">Execute</a>
                       </div>
                     </div>
                   </div>

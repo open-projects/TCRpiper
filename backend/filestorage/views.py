@@ -5,7 +5,7 @@ from django.views import View
 from django import forms
 from django.conf import settings
 
-from .models import File
+from .models import File, cleanup
 
 
 class FileForm(forms.ModelForm):
@@ -30,14 +30,7 @@ class FileUploadView(View):
 
 
 def data_cleanup(request):
-    for item in File.objects.filter(experiment_id=request.POST.get('experiment_id')):
-        item.file.delete()
-        item.delete()
+    cleanup(request.POST.get('experiment_id'))
 
-    for root, dirs, files in os.walk(settings.MEDIA_ROOT):  # cleanup empty dirs
-        for d in dirs:
-            dir = os.path.join(root, d)
-            if not os.listdir(dir):  # check if dir is empty
-                os.rmdir(dir)
     return redirect(request.POST.get('next'))
 

@@ -83,9 +83,10 @@ TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
                   <th scope="col">#</th>
                   <th scope="col">Name</th>
                   <th scope="col">Samples</th>
-                  <th scope="col" style="min-width:8em;">Created</th>
-                  <th scope="col">Status</th>
-                  <th scope="col" style="width:18em;">Configuration</th>
+                  <th scope="col" style="">Created</th>
+                  <th scope="col" style="">Status</th>
+                  <th scope="col" style="">Configuration</th>
+                  <th scope="col" style="">Processing</th>
                 </tr>
               </thead>
               <tbody>
@@ -107,10 +108,18 @@ TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
                   <td>{{ experiment.status }}</td>
                   <td>
                     {% if experiment.status == 'open' %}
-                      <span class="text-danger">Not ready</span>
+                      <span class="text-danger">Not available</span>
                     {% else %}
-                      <span class="" style="padding-right:20px"><a href="{% url 'configurator:get_samplesheet' experiment.id %}">Sample Sheet</a></span>
-                      <span class="" style="padding-right:20px"><a href="{% url 'configurator:get_sampleinfo' experiment.id %}">Sample Info</a></span>
+                      <span><a href="{% url 'configurator:get_samplesheet' experiment.id %}">SampleSheet</a></span>
+                      &nbsp;
+                      <span><a href="{% url 'configurator:get_sampleinfo' experiment.id %}">SampleInfo</a></span>
+                    {% endif %}
+                  </td>
+                  <td>
+                    {% if experiment.status == 'open' %}
+                      <span class="text-danger">Not available</span>
+                    {% else %}
+                      <span class=""><a href="{{ experiment.output_file }}">Download</a></span>
                     {% endif %}
                   </td>
                 </tr>

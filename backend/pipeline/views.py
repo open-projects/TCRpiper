@@ -3,6 +3,8 @@ TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
 '''
 
 import re
+import os
+import os.path
 import subprocess
 
 from django.core.files.base import ContentFile
@@ -36,9 +38,9 @@ def get(request, experiment_id=0):
     file_item = File.objects.filter(experiment_id=experiment.id).first()
 
     input_path = '.' + re.sub(r'/[^/]*$', '/', file_item.file.url)
-    output_path = input_path + pipelne_settings.OUT_DIRNAME
+    output_path = input_path + re.sub(r'/$', '', pipelne_settings.OUT_DIRNAME)
     log_file = output_path + '/' + pipelne_settings.LOG_FILE
-    compressed_file = input_path + '/' + pipelne_settings.OUT_FILE
+    compressed_file = input_path + pipelne_settings.OUT_FILE
     cmd_array = [pipelne_settings.PYTHON_PATH,
                  pipelne_settings.PIPER_PATH,
                  '-m', pipelne_settings.MAX_MEMORY,
@@ -68,6 +70,11 @@ def get(request, experiment_id=0):
             else:
                 break
     if new_task:
+        if os.path.isfile(experiment.output_file):
+            try:
+                os.remove(experiment.output_file)  # remove the old output file
+            except Exception:
+                ...  # add some code ?
         try:
             process = subprocess.Popen(cmd_array, stdin=None, stdout=None, stderr=None, shell=False, close_fds=True)
         except Exception:

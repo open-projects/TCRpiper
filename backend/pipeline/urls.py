@@ -8,6 +8,5 @@ from . import views
 
 app_name = 'pipeline'
 urlpatterns = [
-    path('', views.get, name='pipeline_get'),
     path('get/<int:experiment_id>/', views.get, name='pipeline_get'),
 ]

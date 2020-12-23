@@ -41,7 +41,6 @@ class Experiment(models.Model):
             print("can't remove output dir for experiment {}".format(self.id))
         super().delete(using=using, keep_parents=keep_parents)  # delete the Experiment object
 
-
     def num_of_samples(self):
         sample_list = Sample.objects.filter(experiment_id=self.id)
         return len(sample_list)
