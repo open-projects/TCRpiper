@@ -9,4 +9,5 @@ from . import views
 app_name = 'pipeline'
 urlpatterns = [
     path('get/<int:experiment_id>/', views.get, name='pipeline_get'),
+    path('download/<int:experiment_id>/', views.download, name='pipeline_download'),
 ]

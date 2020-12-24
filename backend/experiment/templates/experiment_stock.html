@@ -13,6 +13,7 @@ TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
   <meta name="author" content="">
+  <meta http-equiv="refresh" content="5" />
 
   <title>TCRpiper</title>
   <link rel="shortcut icon" href="{% static "favicon.ico" %}" />
@@ -119,7 +120,15 @@ TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
                     {% if experiment.status == 'open' %}
                       <span class="text-danger">Not available</span>
                     {% else %}
-                      <span class=""><a href="{{ experiment.output_file }}">Download</a></span>
+                      {% if experiment.output_status == 'incomplete' %}
+                        <span class="text-info">No loaded data</span>
+                      {% elif experiment.output_status == 'waiting' %}
+                        <span class=""><a href="{% url 'pipeline:pipeline_get' experiment.id %}">Server was busy, run now</a></span>
+                      {% elif experiment.output_status == 'ongoing' %}
+                        <span class="text-success">Processing... Wait</span>
+                      {% elif experiment.output_status == 'ready' %}
+                        <span class=""><a href="{% url 'pipeline:pipeline_download' experiment.id %}">Download</a></span>
+                      {% endif %}
                     {% endif %}
                   </td>
                 </tr>

@@ -7,11 +7,12 @@ import os
 import os.path
 import subprocess
 
+from django.conf import settings
 from django.core.files.base import ContentFile
 from django.urls import reverse
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
-from django.http import Http404
+from django.http import HttpResponse, Http404
 
 from experiment.models import Experiment
 from pipeline import settings as pipelne_settings
@@ -74,7 +75,7 @@ def get(request, experiment_id=0):
             try:
                 os.remove(experiment.output_file)  # remove the old output file
             except Exception:
-                ...  # add some code ?
+                raise Http404("Can't remove the old output file!\n")
         try:
             process = subprocess.Popen(cmd_array, stdin=None, stdout=None, stderr=None, shell=False, close_fds=True)
         except Exception:
@@ -92,11 +93,33 @@ def get(request, experiment_id=0):
                     experiment.output_status = 'ongoing'
                     experiment.save()
                 except Exception:
-                    return HttpResponseRedirect(reverse('experiment:experiment_stock'))
+                    raise Http404("Can't modify the experiment status!")
     else:
-        context = {
-            'cmd': "All server slots are taken! Try later...",
-        }
+        try:
+            experiment.output_file = compressed_file
+            experiment.output_dir = output_path
+            experiment.output_status = 'waiting'
+            experiment.save()
+        except Exception:
+            raise Http404("Can't modify the experiment status!")
+
+    return HttpResponseRedirect(reverse('experiment:experiment_stock'))
+
+
+def download(request, experiment_id=0):
+    if experiment_id:
+        try:
+            experiment = Experiment.objects.get(id=experiment_id)
+        except Exception:
+            #raise Http404("Experiment does not exist")
+            return HttpResponseRedirect(reverse('experiment:experiment_stock'))
+
+    file_path = experiment.output_file
+    if os.path.exists(file_path):
+        with open(file_path, 'rb') as fh:
+            response = HttpResponse(fh.read(), content_type="application/gzip")
+            response['Content-Disposition'] = 'inline; filename=' + os.path.basename(file_path)
+            return response
 
     return HttpResponseRedirect(reverse('experiment:experiment_stock'))
 

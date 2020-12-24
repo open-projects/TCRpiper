@@ -17,13 +17,25 @@ from filestorage.models import File, cleanup
 
 def stock(request):
     experiment_list = Experiment.objects.order_by('id').reverse()
-    # mark completed tasks as 'ready'
     for experiment in experiment_list:
-        if experiment.output_status != 'ready':
-            out_file = experiment.output_file
-            if os.path.exists(out_file):
+        out_file = experiment.output_file
+        try:
+            # check the status of the experiment
+            file_list = File.objects.filter(experiment_id=experiment.id)
+            if not file_list:
+                experiment.output_status = 'incomplete'
+                experiment.save()
+            elif experiment.output_status == 'ready' and not os.path.exists(out_file):
+                experiment.output_status = 'waiting'
+                experiment.save()
+            elif experiment.output_status == 'ongoing' and os.path.exists(out_file):
                 experiment.output_status = 'ready'
                 experiment.save()
+            elif experiment.output_status == 'waiting' and os.path.exists(out_file):
+                experiment.output_status = 'ready'
+                experiment.save()
+        except Exception:
+            raise Http404("Can't check the experiment status!")
 
     context = {
         'experiment_list': experiment_list,
