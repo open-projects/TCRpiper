@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'configurator.apps.ConfiguratorConfig',
     'filestorage.apps.FilestorageConfig',
     'pipeline.apps.PipelineConfig',
+    'accounts.apps.AccountsConfig',
 ]
 
 MIDDLEWARE = [
