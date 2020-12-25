@@ -41,7 +41,7 @@ TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
             <a class="nav-link" href="#">About</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Contact</a>
+            <a class="nav-link" href="#">Contacts</a>
           </li>
         </ul>
       </div>
@@ -50,40 +50,100 @@ TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
 
   <!-- Page Content -->
   <div class="container">
-
-    <!-- Heading Row -->
-    <div class="row align-items-center my-5">
+    <div class="row align-items-top my-5">
+      <!-- Main Picture -->
       <div class="col-lg-7">
         <img class="img-fluid rounded mb-4 mb-lg-0" src="{% static "pic/TCR-complex.png" %}" alt="">
       </div>
-      <!-- /.col-lg-8 -->
-      <div class="col-lg-5">
-        <h1 class="font-weight-light">TCRpiper</h1>
-        <p>This is a test version of TCRpiper, a web-based application for analysis of T-cell receptor repertoires.
-	    It doesn't have too much fancy flare to it, but it makes a great use of the standard programs for TCR sequencing data generated on Illumina instruments.
-	     Feel free to use this application for your project!</p>
-        <a class="btn btn-primary" href="{% url 'experiment:experiment_stock' %}">Go to Experiments</a>
-      </div>
-      <!-- /.col-md-4 -->
-    </div>
-    <!-- /.row -->
 
-    <!-- Centered Row -->
-    <div class="row">
-      <div class="col-md-12 mb-5">
-        <div class="card h-100">
-          <div class="card-body">
-            <h2 class="card-title">Home</h2>
+      <!-- Sign In/Up Forms-->
+      <div class="col-lg-5">
+        <div class="container">
+          <nav>
+            <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+              <a class="nav-item nav-link" id="nav-sign-up-tab" data-toggle="tab" href="#nav-sign-up" role="tab" aria-controls="nav-sign-up" aria-selected="false">Sign Up</a>
+              <a class="nav-item nav-link active" id="nav-sign-in-tab" data-toggle="tab" href="#nav-sign-in" role="tab" aria-controls="nav-sign-in" aria-selected="true">Sign In</a>
+            </div>
+          </nav>
+          <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade" id="nav-sign-up" role="tabpanel" aria-labelledby="nav-sign-up-tab">
+              <div class="row">
+                <div class="col-md-12 mb-3">
+                  <label for="new_user">User name</label>
+                  <input type="text" class="form-control" name="new_user" id="new_user" placeholder="" value="">
+                  <div class="invalid-feedback">
+                    Valid user name is required.
+                  </div>
+                </div>
+                <div class="col-md-12 mb-3">
+                  <label for="email">E-mail</label>
+                  <input type="text" class="form-control" name="email" id="email" placeholder="" value="">
+                  <div class="invalid-feedback">
+                    Valid e-mail is required.
+                  </div>
+                </div>
+                <div class="col-md-12 mb-3">
+                  <label for="new_password1">Password</label>
+                  <input type="password" class="form-control" name="new_password1" id="new_password1" placeholder="" value="">
+                  <div class="invalid-feedback">
+                    Valid password is required.
+                  </div>
+                </div>
+                <div class="col-md-12 mb-4">
+                  <label for="new_repassword2">Retype Password</label>
+                  <input type="password" class="form-control" name="new_repassword2" id="new_repassword2" placeholder="" value="">
+                  <div class="invalid-feedback">
+                    Valid matched passwords are required.
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="float-right">
+                    <button type="submit" class="btn btn-success">Sign Up</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- /.tab-pane -->
+
+            <div class="tab-pane fade show active" id="nav-sign-in" role="tabpanel" aria-labelledby="nav-sign-in-tab">
+              <div class="row">
+                <div class="col-md-12 mb-3">
+                  <label for="user">User name</label>
+                  <input type="text" class="form-control" name="user" id="user" placeholder="" value="">
+                  <div class="invalid-feedback">
+                    Valid user name is required.
+                  </div>
+                </div>
+                <div class="col-md-12 mb-4">
+                  <label for="password">Password</label>
+                  <input type="password" class="form-control" name="password" id="password" placeholder="" value="">
+                  <div class="invalid-feedback">
+                    Valid user name is required.
+                  </div>
+                </div>
+
+                <div class="col-md-12">
+                  <div class="float-right">
+                    <button type="submit" class="btn btn-success">Sign In</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- /.tab-pane -->
 
           </div>
+          <!-- /.tab-content -->
         </div>
+        <!-- /.conteiner -->
       </div>
-      <!-- /.col-md-4 -->
+
+      <h1 class="font-weight-light">TCRpiper</h1>
+      <p>This is a test version of TCRpiper, a web-based application for analysis of T-cell receptor repertoires.
+      It doesn't have too much fancy flare to it, but it makes a great use of the standard programs for TCR sequencing data generated on Illumina instruments.
+       Feel free to use this application for your project!</p>
+      <a class="btn btn-primary" href="{% url 'experiment:experiment_stock' %}">Go to Experiments</a>
 
     </div>
-    <!-- /.row -->
-
-
   </div>
   <!-- /.container -->
 
@@ -92,7 +152,6 @@ TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
     <div class="container">
       <p class="m-0 text-center text-white">Copyright &copy; TCRpiper 2020</p>
     </div>
-    <!-- /.container -->
   </footer>
 
   <!-- Bootstrap core JavaScript -->
