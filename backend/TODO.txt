@@ -12,3 +12,9 @@ add button "reopen experiment"
 
 uniq experiment_id + index
 
+
+################
+Sign In/Out
+look at:
+https://levelup.gitconnected.com/how-to-implement-login-logout-and-registration-with-djangos-user-model-59442164db73
+
