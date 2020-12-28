@@ -147,25 +147,28 @@ TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
                 <div class="col-md-12 mb-5">
                   <div class="card h-100">
                     <div class="card-header">List of pipeline options</div>
-                    <div class="card-body scroll">
-                      <div class="form-group mb-4">
-                        <div class="custom-control custom-checkbox mb-2">
-                          <input type="checkbox" class="custom-control-input" id="overseqThreshold">
-                          <label class="custom-control-label" for="overseqThreshold">Overseq threshold</label>
+                    <div class="card-body">
+                      <form action="{% url 'pipeline:pipeline_get' experiment_id %}" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group mb-4">
+                          <div class="custom-control custom-checkbox mb-2">
+                            <input type="checkbox" class="custom-control-input" name="overseqThreshold" id="overseqThreshold">
+                            <label class="custom-control-label" for="overseqThreshold">Overseq threshold</label>
+                          </div>
+                          <input type="number" class="form-control col-md-2" placeholder="0" min="0" name="overseqThresholdValue" id="overseqThresholdValue" value="0">
                         </div>
-                        <input type="number" class="form-control col-md-2" placeholder="0" min="0">
-                      </div>
-                      <div class="custom-control custom-checkbox mb-4">
-                        <input type="checkbox" class="custom-control-input" id="collisionFilter">
-                        <label class="custom-control-label" for="collisionFilter">Force collision filter</label>
-                      </div>
-                      <div class="custom-control custom-checkbox mb-4">
-                        <input type="checkbox" class="custom-control-input" id="keepSequences"checked="checked">
-                        <label class="custom-control-label" for="keepSequences">Remove filtered sequences</label>
-                      </div>
-                      <div class="float-right in-stock-visible {% if num_of_files > 0 %}visible{% else %}invisible{% endif %}">
-                        <a class="btn btn-success" href="{% url 'pipeline:pipeline_get' experiment_id %}">Execute</a>
-                      </div>
+                        <div class="custom-control custom-checkbox mb-4">
+                          <input type="checkbox" class="custom-control-input" name="collisionFilter" id="collisionFilter">
+                          <label class="custom-control-label" for="collisionFilter">Force collision filter</label>
+                        </div>
+                        <div class="custom-control custom-checkbox mb-4">
+                          <input type="checkbox" class="custom-control-input" name="rmSequences" id="rmSequences" checked="checked">
+                          <label class="custom-control-label" for="rmSequences">Remove filtered sequences</label>
+                        </div>
+                        <div class="float-right in-stock-visible {% if num_of_files > 0 %}visible{% else %}invisible{% endif %}">
+                          <button type="submit" class="btn btn-success">Execute</button>
+                        </div>
+                      </form>
                     </div>
                   </div>
                 </div>

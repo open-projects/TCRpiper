@@ -50,8 +50,18 @@ def get(request, experiment_id=0):
                  '-l', log_file,
                  '-z', compressed_file,
                  '-p', str(pipelne_settings.PORT),
-                 '-r',
                  ]
+
+    if request.POST.get('overseqThreshold', False):
+        cmd_array.append('-f')
+        cmd_array.append(request.POST['overseqThresholdValue'])
+
+    if request.POST.get('collisionFilter', False):
+        cmd_array.append('-c')
+
+    if request.POST.get('rmSequences', False):  # remove sequences from the output
+        cmd_array.append('-r')
+
     cmd_string = ' '.join(cmd_array)
 
     taskRemover()  # remove completed tasks
