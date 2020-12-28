@@ -19,7 +19,8 @@ from pipeline import settings as pipelne_settings
 from configurator.models import makeSampleinfo
 from configurator.settings import SAMPLE_INFO_FILENAME, SAMPLE_INFO_PATTERN
 from filestorage.models import File
-from . models import TaskQueue, taskRemover
+from .models import TaskQueue, taskRemover
+from .settings import SITE_PATH
 
 def get(request, experiment_id=0):
     if experiment_id:
@@ -38,7 +39,8 @@ def get(request, experiment_id=0):
 
     file_item = File.objects.filter(experiment_id=experiment.id).first()
 
-    input_path = '.' + re.sub(r'/[^/]*$', '/', file_item.file.url)
+    input_path = SITE_PATH + re.sub(r'/[^/]*$', '/', file_item.file.url)
+    print(input_path)
     output_path = input_path + re.sub(r'/$', '', pipelne_settings.OUT_DIRNAME)
     log_file = output_path + '/' + pipelne_settings.LOG_FILE
     compressed_file = input_path + pipelne_settings.OUT_FILE

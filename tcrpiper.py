@@ -26,7 +26,7 @@ def main():
     input_parser.add_argument('-l', metavar='/path/to/file_name.log', default=None, help='the log file', required=False)
     input_parser.add_argument('-z', metavar='/path/to/file_name.tar.gz', default=None, help='the compressed file', required=False)
     input_parser.add_argument('-r', action='store_true', help='remove sequence files from output', required=False )
-    input_parser.add_argument('-p', metavar='10000', default=None, help='a socket port number to prevent running multiple instances', required=False)
+    input_parser.add_argument('-p', metavar='10000', default=0, help='a socket port number to prevent running multiple instances', required=False)
 
     args = input_parser.parse_args()
     in_dir = re.sub(r'(.)\/$', r'\1', args.i)
@@ -50,7 +50,7 @@ def main():
             print('starting up on {} port {}'.format(*server_address))
             my_sock.bind(server_address)
         except Exception as error:
-            exit("can't start: an instance of the script is running\n")
+            exit("can't start: an instance of the script is running or the port is taken\n")
 
     if not out_dir:
         out_dir = '/output' if in_dir == '/' else in_dir + '/output'

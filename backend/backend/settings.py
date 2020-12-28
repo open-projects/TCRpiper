@@ -130,3 +130,9 @@ STATICFILES_DIRS = [
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+PYTHON_PATH = 'python3'
+TCR_PIPER_PATH = '../tcrpiper.py'
+SITE_PATH = '.'
+#TCR_PIPER_PATH = '/var/www/tcrpiper/tcrpiper.py'
+#SITE_PATH = '/var/www/tcrpiper/backend'
+
