@@ -8,6 +8,6 @@ from datetime import datetime
 
 
 def index(request):
-    template = loader.get_template('index.html')
-    return HttpResponse(template.render())
+    context = {}
+    return render(request, 'index.html', context)
 

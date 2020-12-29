@@ -8,6 +8,7 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.http import Http404
 from django.urls import reverse
+from django.contrib.auth.decorators import login_required
 
 from .models import Experiment
 from .settings import APPLICATION_TYPE, WORKFLOW_TYPE, ASSAY_TYPE, CHEMISTRY, REVCOMPL, DEFAULT_READS, FILE_VERSION
@@ -15,6 +16,7 @@ from sample.models import Sample
 from filestorage.models import File, cleanup
 
 
+#@login_required
 def stock(request):
     experiment_list = Experiment.objects.order_by('id').reverse()
     for experiment in experiment_list:

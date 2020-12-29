@@ -1,37 +1,33 @@
-from django.shortcuts import render
 from django.urls import reverse
 from django.http import HttpResponseRedirect
-from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import login
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login, logout
+from .forms import RegisterForm
 
 
-@login_required
-def index(request):
-    return render(request,'accounts/index.html')
+def sign_in(request):
+    if request.method == "POST" and 'username' in request.POST and 'password' in request.POST:
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user:
+            login(request, user)
+            return HttpResponseRedirect(reverse('experiment:experiment_stock'))
+        else:
+            ...  # TODO: add control for duplicate names and emails
+    return HttpResponseRedirect(reverse('index:index'))
 
 
 def sign_up(request):
-    context = {}
-    form = UserCreationForm(request.POST or None)
+    form = RegisterForm(request.POST or None)
     if request.method == "POST":
         if form.is_valid():
             user = form.save()
-            login(request,user)
-            return render(request,'accounts/index.html')
-    context['form']=form
-    return render(request,'registration/sign_up.html',context)
+            login(request, user)
+            return HttpResponseRedirect(reverse('experiment:experiment_stock'))
+    return HttpResponseRedirect(reverse('index:index'))
 
 
-
-
-def new(request):
-
-    return HttpResponseRedirect(reverse('experiment:experiment_stock'))
-
-
-def get(request):
-
-    return HttpResponseRedirect(reverse('experiment:experiment_stock'))
+def sign_out(request):
+    logout(request)
+    return HttpResponseRedirect(reverse('index:index'))
 
