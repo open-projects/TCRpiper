@@ -56,7 +56,7 @@ TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
         <img class="img-fluid rounded mb-4 mb-lg-0" src="{% static "pic/TCR-complex.png" %}" alt="">
       </div>
 
-      <!-- Sign In/Up Forms-->
+      <!-- Sign In/Up Forms -->
       <div class="col-lg-5">
         <div class="container">
           <nav>
@@ -66,34 +66,36 @@ TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
             </div>
           </nav>
           <div class="tab-content" id="nav-tabContent">
+
+            <!-- Sign Up Form -->
             <div class="tab-pane fade" id="nav-sign-up" role="tabpanel" aria-labelledby="nav-sign-up-tab">
-              <form action="{% url 'accounts:accounts_new'  %}" method="post" enctype="multipart/form-data">
-                <div class="row">
+              <form action="{% url 'accounts:sign_up' %}" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
+                <div class="row">
                   <div class="col-md-12 mb-3">
                     <label for="new_user">User name</label>
-                    <input type="text" class="form-control" name="new_user" id="new_user" placeholder="" value="">
+                    <input type="text" class="form-control" name="username" id="new_user" maxlength="150" required placeholder="">
                     <div class="invalid-feedback">
                       Valid user name is required.
                     </div>
                   </div>
                   <div class="col-md-12 mb-3">
                     <label for="email">E-mail</label>
-                    <input type="text" class="form-control" name="email" id="email" placeholder="" value="">
+                    <input type="text" class="form-control" name="email" id="email" required placeholder="">
                     <div class="invalid-feedback">
                       Valid e-mail is required.
                     </div>
                   </div>
                   <div class="col-md-12 mb-3">
-                    <label for="new_password1">Password</label>
-                    <input type="password" class="form-control" name="new_password1" id="new_password1" placeholder="" value="">
+                    <label for="password1">Password</label>
+                    <input type="password" class="form-control" name="password1" id="password1" required placeholder="">
                     <div class="invalid-feedback">
                       Valid password is required.
                     </div>
                   </div>
                   <div class="col-md-12 mb-4">
-                    <label for="new_repassword2">Retype Password</label>
-                    <input type="password" class="form-control" name="new_repassword2" id="new_repassword2" placeholder="" value="">
+                    <label for="password2">Retype Password</label>
+                    <input type="password" class="form-control" name="password2" id="password2" required placeholder="">
                     <div class="invalid-feedback">
                       Valid matched passwords are required.
                     </div>
@@ -106,22 +108,23 @@ TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
                 </div>
               </form>
             </div>
-            <!-- /.tab-pane -->
+            <!-- /.tab-pane (Sign Up Form) -->
 
+            <!-- Sign In Form -->
             <div class="tab-pane fade show active" id="nav-sign-in" role="tabpanel" aria-labelledby="nav-sign-in-tab">
-              <form action="{% url 'accounts:accounts_get'  %}" method="post" enctype="multipart/form-data">
+              <form action="{% url 'accounts:sign_in' %}" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="row">
                   <div class="col-md-12 mb-3">
                     <label for="user">User name</label>
-                    <input type="text" class="form-control" name="user" id="user" placeholder="" value="">
+                    <input type="text" class="form-control" name="username" id="user" autofocus required placeholder="">
                     <div class="invalid-feedback">
                       Valid user name is required.
                     </div>
                   </div>
                   <div class="col-md-12 mb-4">
                     <label for="password">Password</label>
-                    <input type="password" class="form-control" name="password" id="password" placeholder="" value="">
+                    <input type="password" class="form-control" name="password" id="password" required placeholder="">
                     <div class="invalid-feedback">
                       Valid user name is required.
                     </div>
@@ -135,7 +138,7 @@ TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
                 </div>
               </form>
             </div>
-            <!-- /.tab-pane -->
+            <!-- /.tab-pane (Sign In Form) -->
           </div>
           <!-- /.tab-content -->
         </div>
@@ -144,8 +147,8 @@ TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
 
       <h1 class="font-weight-light">TCRpiper</h1>
       <p>This is a test version of TCRpiper, a web-based application for analysis of T-cell receptor repertoires.
-      It doesn't have too much fancy flare to it, but it makes a great use of the standard programs for TCR sequencing data generated on Illumina instruments.
-       Feel free to use this application for your project!</p>
+        It doesn't have too much fancy flare to it, but it makes a great use of the standard programs for TCR sequencing data generated on Illumina instruments.
+        Feel free to use this application for your project! (LogIn: test, Password: TCRpiper_2020)</p>
       <a class="btn btn-primary" href="{% url 'experiment:experiment_stock' %}">Go to Experiments</a>
 
     </div>
