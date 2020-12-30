@@ -90,6 +90,10 @@ def get(request, experiment_id, sample_id=0):
 
 
 def set(request, experiment_id, sample_id=0):
+    user = 'Unknown'
+    if request.user.is_authenticated:
+        user = request.user
+
     try:
         experiment = Experiment.objects.get(id=experiment_id)
     except Exception:
@@ -121,6 +125,7 @@ def set(request, experiment_id, sample_id=0):
             sample.beta_index_name = request.POST['beta_index_name']
             sample.beta_index_benchling = request.POST['beta_index_benchling']
             sample.comments = request.POST['comments']
+            sample.owner = user
             sample.save()
         except Exception as e:
             raise Http404("Bad request for Sample")
@@ -144,7 +149,8 @@ def set(request, experiment_id, sample_id=0):
                               beta_subsample_ident=request.POST['beta_subsample_ident'],
                               beta_index_name=request.POST['beta_index_name'],
                               beta_index_benchling=request.POST['beta_index_benchling'],
-                              comments='comments'
+                              comments='comments',
+                              owner=user
                              )
             sample.save()
         except Exception:
