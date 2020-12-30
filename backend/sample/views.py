@@ -5,12 +5,8 @@ TCRpiper - a pipeline for TCR sequence treatment. Copyright (C) 2020  D. Malko
 import re
 from django.shortcuts import render
 from django.urls import reverse
-
-from django.http import HttpResponse
 from django.http import HttpResponseRedirect
-from django.http import HttpResponseNotFound
 from django.http import Http404
-from django.template import loader
 
 from .models import Sample, UsedBarcode, IdContainer
 from experiment.models import Experiment
@@ -18,6 +14,9 @@ from primers.models import Smart, Index
 
 
 def delete(request, experiment_id, sample_id):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('index:index'))
+
     try:
         experiment = Experiment.objects.get(id=experiment_id)
     except Exception:
@@ -35,6 +34,9 @@ def delete(request, experiment_id, sample_id):
 
 
 def get(request, experiment_id, sample_id=0):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('index:index'))
+
     try:
         experiment = Experiment.objects.get(id=experiment_id)
     except Exception:
@@ -90,9 +92,10 @@ def get(request, experiment_id, sample_id=0):
 
 
 def set(request, experiment_id, sample_id=0):
-    user = 'Unknown'
-    if request.user.is_authenticated:
-        user = request.user
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('index:index'))
+
+    user = request.user
 
     try:
         experiment = Experiment.objects.get(id=experiment_id)
@@ -160,6 +163,9 @@ def set(request, experiment_id, sample_id=0):
 
 
 def save(request, experiment_id):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('index:index'))
+
     try:
         experiment = Experiment.objects.get(id=experiment_id)
     except Exception:

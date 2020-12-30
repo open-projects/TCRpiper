@@ -2,7 +2,6 @@
 TCRpiper - a pipeline for TCR sequences treatment. Copyright (C) 2020  D. Malko
 '''
 
-from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.urls import reverse
 
@@ -12,6 +11,9 @@ from .settings import SAMPLE_INFO_FILENAME, SAMPLE_SHEET_FILENAME
 
 
 def samplesheet(request, experiment_id=0):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('index:index'))
+
     if experiment_id:
         try:
             experiment = Experiment.objects.get(id=experiment_id)
@@ -28,6 +30,9 @@ def samplesheet(request, experiment_id=0):
 
 
 def sampleinfo(request, experiment_id=0):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('index:index'))
+
     if experiment_id:
         try:
             experiment = Experiment.objects.get(id=experiment_id)

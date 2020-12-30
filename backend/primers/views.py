@@ -4,6 +4,8 @@ TCRpiper - a pipeline for TCR sequence treatment. Copyright (C) 2020  D. Malko
 
 from django.shortcuts import render
 from django.utils.encoding import smart_str
+from django.urls import reverse
+from django.http import HttpResponseRedirect
 
 import re
 from datetime import datetime
@@ -12,6 +14,9 @@ from .models import Smart, Index, norm_index_type
 
 
 def index(request):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('index:index'))
+
     # data upload
     num_uploaded_indexes = -1
     num_uploaded_smarts = -1

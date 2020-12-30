@@ -7,10 +7,8 @@ import os
 import os.path
 import subprocess
 
-from django.conf import settings
 from django.core.files.base import ContentFile
 from django.urls import reverse
-from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.http import HttpResponse, Http404
 
@@ -22,7 +20,11 @@ from filestorage.models import File
 from .models import TaskQueue, taskRemover
 from .settings import SITE_PATH
 
+
 def get(request, experiment_id=0):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('index:index'))
+
     if experiment_id:
         try:
             experiment = Experiment.objects.get(id=experiment_id)
@@ -119,6 +121,9 @@ def get(request, experiment_id=0):
 
 
 def download(request, experiment_id=0):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('index:index'))
+
     if experiment_id:
         try:
             experiment = Experiment.objects.get(id=experiment_id)

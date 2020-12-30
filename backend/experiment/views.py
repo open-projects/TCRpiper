@@ -18,6 +18,9 @@ from filestorage.models import File, cleanup
 
 #@login_required
 def stock(request):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('index:index'))
+
     experiment_list = Experiment.objects.order_by('id').reverse()
     for experiment in experiment_list:
         out_file = experiment.output_file
@@ -48,6 +51,9 @@ def stock(request):
 
 
 def set(request, experiment_id=0):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('index:index'))
+
     if experiment_id:
         try:
             experiment = Experiment.objects.get(id=experiment_id)
@@ -91,6 +97,9 @@ def set(request, experiment_id=0):
 
 
 def get(request, experiment_id=0):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('index:index'))
+
     if experiment_id:
         try:
             experiment = Experiment.objects.get(id=experiment_id)
@@ -150,6 +159,9 @@ def get(request, experiment_id=0):
 
 
 def delete(request, experiment_id):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('index:index'))
+
     try:
         experiment = Experiment.objects.get(id=experiment_id)
     except Exception:
@@ -165,6 +177,9 @@ def delete(request, experiment_id):
 
 
 def archive(request, experiment_id):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('index:index'))
+
     try:
         experiment = Experiment.objects.get(id=experiment_id)
     except Exception:
@@ -178,6 +193,9 @@ def archive(request, experiment_id):
 
 
 def submit(request, experiment_id):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('index:index'))
+
     try:
         experiment = Experiment.objects.get(id=experiment_id)
     except Exception:
@@ -189,6 +207,9 @@ def submit(request, experiment_id):
 
 
 def open(request, experiment_id):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('index:index'))
+
     try:
         experiment = Experiment.objects.get(id=experiment_id)
     except Exception:
@@ -200,6 +221,9 @@ def open(request, experiment_id):
 
 
 def processing(request, experiment_id=0):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('index:index'))
+
     if experiment_id:
         try:
             experiment = Experiment.objects.get(id=experiment_id)
